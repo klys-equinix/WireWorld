@@ -5,7 +5,7 @@ import java.awt.*;
  */
 public class WireWorld {
     public static void main(String args[]){
-        final Simulation sim = new Simulation(12,"./testFile");
+        final Simulation sim = new Simulation(10,"./testFile");
         sim.start();
         EventQueue.invokeLater(new Runnable() {
             @Override

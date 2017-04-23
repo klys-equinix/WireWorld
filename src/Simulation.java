@@ -88,21 +88,24 @@ public class Simulation {
                 currBoard.setCellState(i,0,1);
             }
         }
+        this.currBoard.drawBoard();
         if(this.numGen!=0) {
             while (numGen > 0) {
-                this.currBoard.drawBoard();
+
                 this.currBoard = nextGeneration();
                 memory.add(this.currBoard);
                 numGen--;
+                this.currBoard.drawBoard();
             }
         }else{
             this.keepRunning=true;
             Board prevBoard;
             while(this.keepRunning){
-                this.currBoard.drawBoard();
+
                 this.currBoard = nextGeneration();
                 memory.add(this.currBoard);
                 numGen--;
+                this.currBoard.drawBoard();
             }
         }
     }
