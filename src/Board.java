@@ -6,7 +6,12 @@ public class Board {
     private int[][] cellStates;
     int rows;
     int columns;
-    public Board(int rows,int columns){
+
+    public int[][] getCellStates() {
+        return cellStates;
+    }
+
+    public Board(int rows, int columns){
         cellStates = new int[rows][columns];
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
@@ -56,16 +61,19 @@ public class Board {
                     if (i < 0 || i > this.rows) {
                         continue;
                     }
-                    if (j >= this.columns||j<0) {
+                    if (j >= this.columns) {
+                        continue;
+                    }
+                    if (j<0){
+                        if(this.cellStates[i][this.columns-1]==1) {
+                            count++;
+                        }
                         continue;
                     }
                     if (this.cellStates[i][j] == 1) {
                         count++;
                     }
                 }
-            }
-            if(col==0&&this.cellStates[row][this.columns-1]==1){
-                return 1;
             }
         }
         if(count==2||count==1){

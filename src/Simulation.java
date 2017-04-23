@@ -8,6 +8,11 @@ public class Simulation {
     private ArrayList<Board> memory = new ArrayList<>();
     private int numGen;
     private Board currBoard;
+
+    public Board getCurrBoard() {
+        return currBoard;
+    }
+
     private boolean keepRunning;
     public Simulation(){
         this.currBoard = new Board(5,10);
