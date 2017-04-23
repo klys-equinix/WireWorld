@@ -34,10 +34,11 @@ public class Board {
     }
     public void drawBoard(){
         for(int i=0;i<this.rows;i++){
+            System.out.print("{");
             for(int j=0;j<this.columns;j++){
-                System.out.print(this.cellStates[i][j]);
+                System.out.print(this.cellStates[i][j]+",");
             }
-            System.out.print("\n");
+            System.out.print("}"+"\n");
         }
         System.out.print("\n");
 
