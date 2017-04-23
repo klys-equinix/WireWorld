@@ -1,8 +1,14 @@
+package gui;
+
+import javafx.scene.control.RadioButton;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 
 /**
@@ -14,6 +20,9 @@ public class ControlPanel {
     private JTextField textFileDir;
     private JButton generujButton;
     private JPanel mainPanel;
+    private JRadioButton nieograniczonaTylkoPodglądRadioButton;
+    private JRadioButton ustalonaLiczbaGeneracjiRadioButton;
+    private JPanel fixedOptions;
     private JFileChooser fc = new JFileChooser();
 
     public ControlPanel() {
@@ -44,9 +53,29 @@ public class ControlPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Time to open next window
-                WireWorld.initGameWindow(textFileDir.getText(), (int) spinnerGenNum.getValue());
+                applogic.WireWorld.initGameWindow(textFileDir.getText(), (int) spinnerGenNum.getValue());
             }
         });
+        nieograniczonaTylkoPodglądRadioButton.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JRadioButton j = (JRadioButton) e.getSource();
+                if (j.isEnabled())
+                    fixedOptions.setVisible(false);
+            }
+        });
+        ustalonaLiczbaGeneracjiRadioButton.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JRadioButton j = (JRadioButton) e.getSource();
+                if (j.isEnabled())
+                    fixedOptions.setVisible(true);
+            }
+        });
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(nieograniczonaTylkoPodglądRadioButton);
+        group.add(ustalonaLiczbaGeneracjiRadioButton);
     }
 
     private void maintainGenButton() {

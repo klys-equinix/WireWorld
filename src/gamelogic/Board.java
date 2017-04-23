@@ -1,3 +1,4 @@
+package gamelogic;
 
 /**
  * Created by Konrad on 20.04.2017.
@@ -13,29 +14,33 @@ public class Board {
 
     public Board(int rows, int columns){
         cellStates = new int[rows][columns];
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<columns;j++){
+        for(int i = 0; i<rows; i++){
+            for(int j = 0; j<columns; j++){
                 cellStates[i][j]=0;
             }
         }
         this.rows=rows;
         this.columns=columns;
     }
-    public Board(int[][] cellStates,int rows,int columns){
+
+    public Board(int[][] cellStates, int rows, int columns){
         this.cellStates=cellStates;
         this.rows=rows;
         this.columns=columns;
     }
+
     public void setCellState(int i,int j,int state){
         this.cellStates[i][j]=state;
     }
+
     public int getCellState(int i,int j){
         return cellStates[i][j];
     }
+
     public void drawBoard(){
-        for(int i=0;i<this.rows;i++){
+        for(int i=0; i<this.rows; i++){
             System.out.print("{");
-            for(int j=0;j<this.columns;j++){
+            for(int j=0; j<this.columns; j++){
                 System.out.print(this.cellStates[i][j]+",");
             }
             System.out.print("}"+"\n");
@@ -43,6 +48,7 @@ public class Board {
         System.out.print("\n");
 
     }
+
     public int evalCell(int row,int col){
         int state;
         int count=0;
@@ -57,8 +63,8 @@ public class Board {
                 return 3;
         }
         if(state==3){
-            for(int i=row-1;i<row+2;i++){
-                for(int j=col-1;j<col+2;j++) {
+            for(int i=row-1; i<row+2; i++){
+                for(int j=col-1; j<col+2; j++) {
                     if (i < 0 || i > this.rows) {
                         continue;
                     }
@@ -79,9 +85,7 @@ public class Board {
         }
         if(count==2||count==1){
             return 1;
-        }
-        else
-        {
+        } else {
             return 3;
         }
     }

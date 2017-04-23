@@ -1,5 +1,9 @@
+package applogic;
+
+import gui.ControlPanel;
+import gui.GamePanel;
+
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by Konrad on 20.04.2017.
@@ -9,6 +13,16 @@ public class WireWorld {
     private static JFrame gameFrame;
 
     public static void main(String args[]){
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // If Nimbus is not available, you can set the GUI to another look and feel.
+        }
         /*
             It's time to open control frame
         */
@@ -17,6 +31,7 @@ public class WireWorld {
         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlFrame.pack();
         controlFrame.setLocationRelativeTo(null);
+        controlFrame.setResizable(false);
         controlFrame.setVisible(true);
     }
 

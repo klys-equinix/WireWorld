@@ -2,21 +2,14 @@
  * Created by Konrad on 22.04.2017.
  */
 
-import java.awt.EventQueue;
+import gamelogic.Board;
+
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
-import java.awt.geom.Rectangle2D;
-import java.awt.Graphics2D;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
-import java.awt.Color;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class Surface extends JPanel implements ActionListener {
     ArrayList<Board> boards = new ArrayList<Board>();
@@ -44,6 +37,7 @@ public class Surface extends JPanel implements ActionListener {
     }
 
     private void doDrawing(Graphics g) {
+        /*
         Graphics2D g1 = (Graphics2D) g;
         int zeroX = 20;
         int zeroY = 20;
@@ -74,6 +68,7 @@ public class Surface extends JPanel implements ActionListener {
             zeroY += 11;
             zeroX = 20;
         }
+        */
     }
 
     @Override

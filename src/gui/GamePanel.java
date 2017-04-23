@@ -1,3 +1,5 @@
+package gui;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -18,12 +20,6 @@ public class GamePanel {
     private JLabel imgLabel;
 
     public GamePanel() {
-        try {
-            imgLabel.setIcon(new ImageIcon(new URL("http://i0.kym-cdn.com/entries/icons/original/000/001/030/dickbutt.jpg")));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        imgLabel.setText("");
     }
 
     public JPanel getPanel() {

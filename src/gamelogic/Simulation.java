@@ -1,3 +1,5 @@
+package gamelogic;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -14,14 +16,17 @@ public class Simulation {
     }
 
     private boolean keepRunning;
+
     public Simulation(){
         this.currBoard = new Board(5,10);
         this.numGen=0;
     }
+
     public Simulation(int numGen){
         this();
         this.numGen=numGen;
     };
+
     public Simulation(String fileName){
         BufferedReader br = null;
         FileReader fr =null;
@@ -78,12 +83,14 @@ public class Simulation {
         }
         this.numGen=0;
     }
+
     public Simulation(int numGen,String fileName){
         this(fileName);
         this.numGen=numGen;
     }
+
     public void start(){
-        for(int i=0;i<currBoard.rows;i++){
+        for(int i=0; i<currBoard.rows; i++){
             if(currBoard.getCellState(i,0)==3){
                 currBoard.setCellState(i,0,1);
             }
@@ -109,11 +116,12 @@ public class Simulation {
             }
         }
     }
+
     private Board nextGeneration(){
         Board nextGen = new Board(currBoard.rows,currBoard.columns);
         boolean isDead = true;
-        for(int i=0;i<currBoard.rows;i++){
-            for(int j=0;j<currBoard.columns;j++){
+        for(int i=0; i<currBoard.rows; i++){
+            for(int j=0; j<currBoard.columns; j++){
                 int newState = currBoard.evalCell(i,j);
                 nextGen.setCellState(i,j,newState);
                 if(newState==1){
@@ -127,6 +135,7 @@ public class Simulation {
         }
         return nextGen;
     }
+
     public void stop(){
         this.numGen=0;
         this.keepRunning=false;
