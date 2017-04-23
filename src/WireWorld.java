@@ -16,6 +16,7 @@ public class WireWorld {
         controlFrame.setContentPane(new ControlPanel().getPanel());
         controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlFrame.pack();
+        controlFrame.setLocationRelativeTo(null);
         controlFrame.setVisible(true);
     }
 
@@ -24,6 +25,7 @@ public class WireWorld {
         gameFrame.setContentPane(new GamePanel().getPanel());
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
 
         // Closing control frame - no longer needed
