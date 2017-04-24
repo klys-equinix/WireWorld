@@ -8,6 +8,8 @@ public class ComponentFactory {
             switch (compType){
                 case "Diode":
                     return new Diode(rotation,loc);
+                case "ORgate":
+                    return new ORgate(rotation,loc);
             }
             return null;
     };

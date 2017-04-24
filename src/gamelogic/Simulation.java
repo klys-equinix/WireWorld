@@ -82,7 +82,9 @@ public class Simulation {
     public void imprintToBoard(String compType,int[] loc,int rotation){
         ComponentFactory compFact = new ComponentFactory();
         Component newComp = compFact.getComponent(compType,loc,rotation);
-        this.currBoard.imprintComponent(newComp);
+        if(newComp!=null) {
+            this.currBoard.imprintComponent(newComp);
+        }
     }
 
     public void start(){
