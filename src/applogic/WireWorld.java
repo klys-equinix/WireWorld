@@ -1,5 +1,6 @@
 package applogic;
 
+import gamelogic.Simulation;
 import gui.ControlPanel;
 import gui.GamePanel;
 
@@ -33,6 +34,10 @@ public class WireWorld {
         controlFrame.setLocationRelativeTo(null);
         controlFrame.setResizable(false);
         controlFrame.setVisible(true);
+        Simulation sim = new Simulation(5,10);//creating a simulation with an empty board
+        int[] loc ={1,1};//location of topmost indexes of an element-where should it be placed on the board
+        sim.imprintToBoard("Diode",loc,1);//imprinting the element on the empty board
+        sim.start(10);
     }
 
     public static void initGameWindow(String filePath, int genNum) {

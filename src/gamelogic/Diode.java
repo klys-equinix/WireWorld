@@ -1,0 +1,41 @@
+package gamelogic;
+
+/**
+ * Created by Konrad on 24.04.2017.
+ */
+public class Diode extends Component {
+    public Diode(int rotation,int[] loc){
+            this.loc = loc;
+            this.rotation=rotation;
+            switch (rotation){
+                case 0:
+                    this.structure= new int [][] {{3,3},
+                            {3,0},
+                            {3,3}};
+                    this.input= new int[][] {{1,0}};
+                    this.output= new int[][] {{1,1}};
+                    break;
+                case 1:
+                    this.structure= new int [][] {{3,0,3},
+                            {3,3,3}};
+                    this.input = new int[][] {{0,1}};
+                    this.output = new int[][] {{1,1}};
+                    break;
+                case 2:
+                    this.structure= new int [][] {{3,3},
+                            {0,3},
+                            {3,3}};
+                    this.input= new int[][] {{1,0}};
+                    this.output= new int[][] {{1,1}};
+                    break;
+                case 3:
+                    this.structure= new int [][] {{3,3,3},
+                            {3,0,3}};
+                    this.input = new int[][] {{0,1}};
+                    this.output = new int[][] {{1,1}};
+                    break;
+            }
+
+    }
+
+}

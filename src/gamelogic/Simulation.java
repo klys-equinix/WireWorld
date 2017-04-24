@@ -10,15 +10,15 @@ public class Simulation {
     private ArrayList<Board> memory = new ArrayList<>();
     private int numGen;
     private Board currBoard;
-
+    private boolean firstGen=true;
     public Board getCurrBoard() {
         return currBoard;
     }
 
     private boolean keepRunning;
 
-    public Simulation(){
-        this.currBoard = new Board(5,10);
+    public Simulation(int rows, int columns){
+        this.currBoard = new Board(rows,columns);
         this.numGen=0;
     }
 
@@ -79,15 +79,13 @@ public class Simulation {
         this.numGen=0;
     }
 
-
+    public void imprintToBoard(String compType,int[] loc,int rotation){
+        ComponentFactory compFact = new ComponentFactory();
+        Component newComp = compFact.getComponent(compType,loc,rotation);
+        this.currBoard.imprintComponent(newComp);
+    }
 
     public void start(){
-        for(int i=0; i<currBoard.rows; i++){
-            if(currBoard.getCellState(i,0)==3){
-                currBoard.setCellState(i,0,1);
-            }
-        }
-        this.currBoard.drawBoard();
 
         this.keepRunning=true;
         while(this.keepRunning){
@@ -99,12 +97,7 @@ public class Simulation {
     }
     public void start(int numGen){//changed-now there are no constructors specyfying the numGen
         this.numGen=numGen;
-        for(int i=0; i<currBoard.rows; i++){
-            if(currBoard.getCellState(i,0)==3){
-                currBoard.setCellState(i,0,1);
-            }
-        }
-        this.currBoard.drawBoard();
+
         if(this.numGen!=0) {
             while (numGen > 0) {
                 nextGeneration();
@@ -115,6 +108,24 @@ public class Simulation {
     }
 
     private void nextGeneration(){
+        if(firstGen){
+            this.numGen=numGen;
+            this.currBoard.drawBoard();
+            this.memory.add(currBoard);
+            for(int i=0; i<currBoard.rows; i++){
+                if(currBoard.getCellState(i,0)==3){
+                    currBoard.setCellState(i,0,1);
+                }
+            }
+            for(int j=0; j<currBoard.columns; j++){
+                if(currBoard.getCellState(0,j)==3){
+                    currBoard.setCellState(0,j,1);
+                }
+            }
+            this.currBoard.drawBoard();
+            this.memory.add(currBoard);
+            firstGen=false;
+        }
         Board nextGen = new Board(currBoard.rows,currBoard.columns);
         boolean isDead = true;
         for(int i=0; i<currBoard.rows; i++){
