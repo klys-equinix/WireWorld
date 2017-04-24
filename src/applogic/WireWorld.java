@@ -1,9 +1,14 @@
 package applogic;
 
+import gamelogic.Board;
+import gamelogic.Simulation;
 import gui.ControlPanel;
 import gui.GamePanel;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Konrad on 20.04.2017.
@@ -36,8 +41,9 @@ public class WireWorld {
     }
 
     public static void initGameWindow(String filePath, int genNum) {
+        GamePanel gp = new GamePanel();
         gameFrame = new JFrame();
-        gameFrame.setContentPane(new GamePanel().getPanel());
+        gameFrame.setContentPane(gp.getPanel());
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
