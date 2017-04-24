@@ -10,6 +10,10 @@ public class ComponentFactory {
                     return new Diode(rotation,loc);
                 case "ORgate":
                     return new ORgate(rotation,loc);
+                case "ExORgate":
+                    return new ExORgate(rotation,loc);
+                case "ClockGen":
+                    return new ClockGen(rotation,loc);
             }
             return null;
     };

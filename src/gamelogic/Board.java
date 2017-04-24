@@ -91,52 +91,93 @@ public class Board {
             return 3;
         }
     }
-
+    // jak zdążę to zrefaktoryzuję, metoda "montująca" komponenty na tablicy (drukująca komponent i jego kable)
     public void imprintComponent(Component newComp) {//nie spodoba ci się to Szymon więc lepiej nie patrz MACIEK
-        int[][] tempStates = this.cellStates;
+        int[][] tempState=new int[this.rows][this.columns];
+        for (int i = 0; i < this.cellStates.length; i++) {
+            System.arraycopy(this.cellStates[i], 0, tempState[i], 0, this.cellStates[0].length);
+        }
         for (int i = newComp.loc[0]; i < newComp.structure.length + newComp.loc[0]; i++) {
             for (int j = newComp.loc[1]; j < newComp.structure[0].length + newComp.loc[1]; j++) {
                 if (i < 0 || i >= this.rows || j >= this.columns || j < 0) {
+                    System.out.print("component does not fit");//dodać porządny error handling
                     return;
                 } else {
-                    tempStates[i][j] = newComp.structure[i - newComp.loc[0]][j - newComp.loc[1]];
+                    tempState[i][j] = newComp.structure[i - newComp.loc[0]][j - newComp.loc[1]];
                 }
             }
         }
-        this.cellStates = tempStates;
-        if (newComp.rotation == 0 || newComp.rotation == 2) {
-            for(int []in :newComp.input) {
-                for (int i = newComp.loc[1]+in[1]-1;i>=0;i--){
-                    if(this.cellStates[in[0]+newComp.loc[0]][i]==3){
-                        break;
+        this.cellStates = tempState;
+        if(newComp.wire) {
+            if (newComp.rotation == 0) {
+                for (int[] in : newComp.input) {
+                    for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
+                        if (this.cellStates[in[0] + newComp.loc[0]][i] == 3) {
+                            break;
+                        }
+                        this.cellStates[in[0] + newComp.loc[0]][i] = 3;
                     }
-                    this.cellStates[in[0]+newComp.loc[0]][i]=3;
                 }
-            }
 
-            for(int []out :newComp.output) {
-                for (int i = out[1]+newComp.loc[1]+1;i<this.columns;i++){
-                    if(this.cellStates[out[0]+newComp.loc[0]][i]==3){
-                        break;
+                for (int[] out : newComp.output) {
+                    for (int i = out[1] + newComp.loc[1] + 1; i < this.columns; i++) {
+                        if (this.cellStates[out[0] + newComp.loc[0]][i] == 3) {
+                            break;
+                        }
+                        this.cellStates[out[0] + newComp.loc[0]][i] = 3;
                     }
-                    this.cellStates[out[0]+newComp.loc[0]][i]=3;
                 }
-            }
-        }else{
-            for(int []in :newComp.input) {
-                for (int i = newComp.loc[0]+in[0]-1;i>=0;i--){
-                    if(this.cellStates[i][in[1]+newComp.loc[1]]==3){
-                        break;
+            } else if (newComp.rotation == 1) {
+                for (int[] in : newComp.input) {
+                    for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
+                        if (this.cellStates[i][in[1] + newComp.loc[1]] == 3) {
+                            break;
+                        }
+                        this.cellStates[i][in[1] + newComp.loc[1]] = 3;
                     }
-                    this.cellStates[i][in[1]+newComp.loc[1]]=3;
                 }
-            }
-            for(int []out :newComp.output) {
-                for (int i = out[0]+newComp.loc[0]+1;i<this.rows;i++){
-                    if(this.cellStates[i][out[1]+newComp.loc[1]]==3){
-                        break;
+                for (int[] out : newComp.output) {
+                    for (int i = out[0] + newComp.loc[0] + 1; i < this.rows; i++) {
+                        if (this.cellStates[i][out[1] + newComp.loc[1]] == 3) {
+                            break;
+                        }
+                        this.cellStates[i][out[1] + newComp.loc[1]] = 3;
                     }
-                    this.cellStates[i][out[1]+newComp.loc[1]]=3;
+                }
+            } else if (newComp.rotation == 2) {
+                for (int[] in : newComp.input) {
+                    for (int i = newComp.loc[1] + in[1] + 1; i < this.columns; i++) {
+                        if (this.cellStates[in[0] + newComp.loc[0]][i] == 3) {
+                            break;
+                        }
+                        this.cellStates[in[0] + newComp.loc[0]][i] = 3;
+                    }
+                }
+
+                for (int[] out : newComp.output) {
+                    for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
+                        if (this.cellStates[out[0] + newComp.loc[0]][i] == 3) {
+                            break;
+                        }
+                        this.cellStates[out[0] + newComp.loc[0]][i] = 3;
+                    }
+                }
+            } else if (newComp.rotation == 3) {
+                for (int[] in : newComp.input) {
+                    for (int i = newComp.loc[0] + in[0] + 1; i < this.rows; i++) {
+                        if (this.cellStates[i][in[1] + newComp.loc[1]] == 3) {
+                            break;
+                        }
+                        this.cellStates[i][in[1] + newComp.loc[1]] = 3;
+                    }
+                }
+                for (int[] out : newComp.output) {
+                    for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
+                        if (this.cellStates[i][out[1] + newComp.loc[1]] == 3) {
+                            break;
+                        }
+                        this.cellStates[i][out[1] + newComp.loc[1]] = 3;
+                    }
                 }
             }
         }
