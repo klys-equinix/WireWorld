@@ -44,6 +44,9 @@ public class WireWorld {
         sim.imprintToBoard("ClockGen",loc,2);//imprinting the element on the empty board
         sim.start(10);
         sim.getCurrBoard().drawBoard();
+        sim.writeGenToFile("newFile");
+        Simulation sim1 = new Simulation("./newFile");
+        sim1.getCurrBoard().drawBoard();
     }
 
     public static void initGameWindow(String filePath, int genNum) {

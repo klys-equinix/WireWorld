@@ -147,7 +147,40 @@ public class Simulation {
         this.memory.add(currBoard);//to be deleted after integration with drawing module
 
     }
+    public void writeGenToFile(String fileName){
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(fileName);
+            bw = new BufferedWriter(fw);
+            bw.write(currBoard.rows+" "+currBoard.columns+"\n");
+            for(int i=0; i<currBoard.rows; i++){
+                for(int j=0; j<currBoard.columns; j++){
+                    if(currBoard.getCellState(i,j)==1||currBoard.getCellState(i,j)==2||currBoard.getCellState(i,j)==3){
+                        bw.write(i+"."+j+"\n");
+                    }
+                }
+            }
 
+        }catch(FileNotFoundException ferr){
+            ferr.printStackTrace();
+            return;
+        }catch(IOException err) {
+            err.printStackTrace();
+            return;
+        }finally {
+            try {
+                if (bw != null) {
+                    bw.close();
+                }
+                if  (fw != null){
+                    fw.close();
+                }
+            }catch(IOException err){
+                err.printStackTrace();
+            }
+        }
+    }
     public void stop(){
         this.numGen=0;
         this.keepRunning=false;
