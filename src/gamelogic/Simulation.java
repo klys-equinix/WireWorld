@@ -22,11 +22,6 @@ public class Simulation {
         this.numGen=0;
     }
 
-    public Simulation(int numGen){
-        this();
-        this.numGen=numGen;
-    };
-
     public Simulation(String fileName){
         BufferedReader br = null;
         FileReader fr =null;
@@ -84,10 +79,7 @@ public class Simulation {
         this.numGen=0;
     }
 
-    public Simulation(int numGen,String fileName){
-        this(fileName);
-        this.numGen=numGen;
-    }
+
 
     public void start(){
         for(int i=0; i<currBoard.rows; i++){
@@ -96,28 +88,33 @@ public class Simulation {
             }
         }
         this.currBoard.drawBoard();
-        if(this.numGen!=0) {
-            while (numGen > 0) {
 
-                this.currBoard = nextGeneration();
-                memory.add(this.currBoard);
+        this.keepRunning=true;
+        while(this.keepRunning){
+                nextGeneration();
                 numGen--;
                 this.currBoard.drawBoard();
-            }
-        }else{
-            this.keepRunning=true;
-            Board prevBoard;
-            while(this.keepRunning){
+        }
 
-                this.currBoard = nextGeneration();
-                memory.add(this.currBoard);
+    }
+    public void start(int numGen){//changed-now there are no constructors specyfying the numGen
+        this.numGen=numGen;
+        for(int i=0; i<currBoard.rows; i++){
+            if(currBoard.getCellState(i,0)==3){
+                currBoard.setCellState(i,0,1);
+            }
+        }
+        this.currBoard.drawBoard();
+        if(this.numGen!=0) {
+            while (numGen > 0) {
+                nextGeneration();
                 numGen--;
                 this.currBoard.drawBoard();
             }
         }
     }
 
-    private Board nextGeneration(){
+    private void nextGeneration(){
         Board nextGen = new Board(currBoard.rows,currBoard.columns);
         boolean isDead = true;
         for(int i=0; i<currBoard.rows; i++){
@@ -133,7 +130,9 @@ public class Simulation {
         if(isDead){
             this.keepRunning=false;
         }
-        return nextGen;
+        this.currBoard = nextGen;
+        this.memory.add(currBoard);//to be deleted after integration with drawing module
+
     }
 
     public void stop(){
