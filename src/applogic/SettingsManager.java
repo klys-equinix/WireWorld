@@ -9,10 +9,10 @@ public class SettingsManager {
     /*
         App modes
     */
-    private final static int APP_MODE_FIXED = 0;
-    private final static int APP_MODE_INF = 1;
+    public final static int APP_MODE_FIXED = 0;
+    public final static int APP_MODE_INF = 1;
 
-    private static int appMode;
+    private int appMode;
 
     private SettingsManager() {
     }
@@ -21,12 +21,12 @@ public class SettingsManager {
         return setman;
     }
 
-    protected static void setAppMode(int mode) {
+    public void setAppMode(int mode) {
         assert (appMode < 0 || appMode > 1);
         appMode = mode;
     }
 
-    protected static int getAppMode() {
+    public int getAppMode() {
         return appMode;
     }
 }

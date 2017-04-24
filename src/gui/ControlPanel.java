@@ -1,5 +1,6 @@
 package gui;
 
+import applogic.SettingsManager;
 import javafx.scene.control.RadioButton;
 
 import javax.swing.*;
@@ -52,6 +53,12 @@ public class ControlPanel {
         generujButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SettingsManager setman = SettingsManager.getInstance();
+                if (ustalonaLiczbaGeneracjiRadioButton.isSelected())
+                    setman.setAppMode(SettingsManager.APP_MODE_FIXED);
+                else
+                    setman.setAppMode(SettingsManager.APP_MODE_INF);
+
                 // Time to open next window
                 applogic.WireWorld.initGameWindow(textFileDir.getText(), (int) spinnerGenNum.getValue());
             }
@@ -62,6 +69,7 @@ public class ControlPanel {
                 JRadioButton j = (JRadioButton) e.getSource();
                 if (j.isEnabled())
                     fixedOptions.setVisible(false);
+                maintainGenButton();
             }
         });
         ustalonaLiczbaGeneracjiRadioButton.addItemListener(new ItemListener() {
@@ -70,6 +78,7 @@ public class ControlPanel {
                 JRadioButton j = (JRadioButton) e.getSource();
                 if (j.isEnabled())
                     fixedOptions.setVisible(true);
+                maintainGenButton();
             }
         });
 
@@ -79,13 +88,20 @@ public class ControlPanel {
     }
 
     private void maintainGenButton() {
-        if ((Integer) spinnerGenNum.getValue() != 0) {
+        if (ustalonaLiczbaGeneracjiRadioButton.isSelected()) {
+            if ((Integer) spinnerGenNum.getValue() != 0) {
+                if (textFileDir.getText().isEmpty() == false) {
+                    if (generujButton.isEnabled() == false)
+                        generujButton.setEnabled(true);
+                }
+            } else if (generujButton.isEnabled() == true)
+                generujButton.setEnabled(false);
+        } else {
             if (textFileDir.getText().isEmpty() == false) {
                 if (generujButton.isEnabled() == false)
                     generujButton.setEnabled(true);
             }
-        } else if (generujButton.isEnabled() == true)
-            generujButton.setEnabled(false);
+        }
     }
 
     public JPanel getPanel() {
