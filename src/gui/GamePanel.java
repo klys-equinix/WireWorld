@@ -1,6 +1,7 @@
 package gui;
 
 import applogic.SettingsManager;
+import gamelogic.Board;
 import gui.BoardRenderer.BoardRenderer;
 
 import javax.imageio.ImageIO;
@@ -30,12 +31,15 @@ public class GamePanel {
     private BoardRenderer boardRender;
     private JScrollPane scrollPane;
 
-    public GamePanel() {
+    public GamePanel(Board board) {
         SettingsManager setman = SettingsManager.getInstance();
         if (setman.getAppMode() == SettingsManager.APP_MODE_FIXED)
             infPanel.setVisible(false);
         else
             fixedPanel.setVisible(false);
+
+        boardRender.setHeight(board.rows);
+        boardRender.setWidth(board.columns);
 
         scrollPane.setViewport(null);
         scrollPane.setViewportView(boardRender);
@@ -67,5 +71,10 @@ public class GamePanel {
 
     public JPanel getPanel() {
         return mainPanel;
+    }
+
+    public BoardRenderer getBoardRenderer()
+    {
+        return boardRender;
     }
 }

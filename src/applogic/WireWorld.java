@@ -7,6 +7,8 @@ import gui.ControlPanel;
 import gui.GamePanel;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,7 +52,9 @@ public class WireWorld {
     }
 
     public static void initGameWindow(String filePath, int genNum) {
-        GamePanel gp = new GamePanel();
+        final int genInt = genNum;
+        Simulation sim = new Simulation(filePath);
+        GamePanel gp = new GamePanel(sim.getCurrBoard());
         gameFrame = new JFrame();
         gameFrame.setContentPane(gp.getPanel());
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,6 +62,31 @@ public class WireWorld {
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
 
+        ArrayList<Board> board = new ArrayList<Board>();
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_FIXED)
+                {
+                    if(genInt != 0)
+                    {
+                        sim.nextGeneration();
+                        Board board = sim.getCurrBoard();
+                        gp.getBoardRenderer().setBoard(board);
+                        gp.getBoardRenderer().repaint();
+                        //genInt--;
+                    }
+                }
+                else {
+                    sim.nextGeneration();
+                    Board board = sim.getCurrBoard();
+                    gp.getBoardRenderer().setBoard(board);
+                    gp.getBoardRenderer().repaint();
+                }
+            }
+        }, 750, 750);
         // Closing control frame - no longer needed
         controlFrame.setVisible(false);
         controlFrame.dispose();

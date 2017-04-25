@@ -26,6 +26,8 @@ public class ControlPanel {
     private JPanel fixedOptions;
     private JFileChooser fc = new JFileChooser();
 
+    private String filePath;
+
     public ControlPanel() {
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 50, 1);
         spinnerGenNum.setModel(model);
@@ -36,6 +38,7 @@ public class ControlPanel {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     textFileDir.setText(file.getName());
+                    filePath = file.getAbsolutePath();
                     maintainGenButton();
                     //This is where a real application would open the file.
                     System.out.println("Opening: " + file.getName() + ".");
@@ -60,7 +63,8 @@ public class ControlPanel {
                     setman.setAppMode(SettingsManager.APP_MODE_INF);
 
                 // Time to open next window
-                applogic.WireWorld.initGameWindow(textFileDir.getText(), (int) spinnerGenNum.getValue());
+                applogic.WireWorld.initGameWindow(filePath, (int) spinnerGenNum.getValue());
+                System.out.println("WireWorld GW: "+filePath+","+(int)spinnerGenNum.getValue());
             }
         });
         nieograniczonaTylkoPodglądRadioButton.addItemListener(new ItemListener() {

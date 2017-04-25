@@ -109,7 +109,7 @@ public class Simulation {
         }
     }
 
-    private void nextGeneration(){
+    public void nextGeneration(){
         if(firstGen){
             this.numGen=numGen;
             this.currBoard.drawBoard();

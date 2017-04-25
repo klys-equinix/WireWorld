@@ -5,8 +5,8 @@ package gamelogic;
  */
 public class Board {
     private int[][] cellStates;
-    int rows;
-    int columns;
+    public int rows;
+    public int columns;
 
     public int[][] getCellStates() {
         return cellStates;
@@ -72,9 +72,9 @@ public class Board {
                         continue;
                     }
                     if (j < 0) {
-                        if (this.cellStates[i][this.columns - 1] == 1) {
+                       /* if (this.cellStates[i][this.columns - 1] == 1) {
                             count++;
-                        }
+                        }*/
                         continue;
                     }
                         if (this.cellStates[i][j] == 1) {
