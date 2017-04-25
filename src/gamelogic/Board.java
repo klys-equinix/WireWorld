@@ -68,15 +68,10 @@ public class Board {
                     if (i < 0 || i >= this.rows) {
                         continue;
                     }
-                    if (j >= this.columns) {
+                    if (j >= this.columns||j<0) {
                         continue;
                     }
-                    if (j < 0) {
-                       /* if (this.cellStates[i][this.columns - 1] == 1) {
-                            count++;
-                        }*/
-                        continue;
-                    }
+
                         if (this.cellStates[i][j] == 1) {
                             count++;
 
@@ -112,7 +107,7 @@ public class Board {
             if (newComp.rotation == 0) {
                 for (int[] in : newComp.input) {
                     for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
-                        if (this.cellStates[in[0] + newComp.loc[0]][i] == 3) {
+                        if (isWire(in[0] + newComp.loc[0],i,false)) {
                             break;
                         }
                         this.cellStates[in[0] + newComp.loc[0]][i] = 3;
@@ -121,7 +116,7 @@ public class Board {
 
                 for (int[] out : newComp.output) {
                     for (int i = out[1] + newComp.loc[1] + 1; i < this.columns; i++) {
-                        if (this.cellStates[out[0] + newComp.loc[0]][i] == 3) {
+                        if (isWire(out[0] + newComp.loc[0],i,false)) {
                             break;
                         }
                         this.cellStates[out[0] + newComp.loc[0]][i] = 3;
@@ -130,7 +125,7 @@ public class Board {
             } else if (newComp.rotation == 1) {
                 for (int[] in : newComp.input) {
                     for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
-                        if (this.cellStates[i][in[1] + newComp.loc[1]] == 3) {
+                        if (isWire(i,in[1] + newComp.loc[1],true)) {
                             break;
                         }
                         this.cellStates[i][in[1] + newComp.loc[1]] = 3;
@@ -138,7 +133,7 @@ public class Board {
                 }
                 for (int[] out : newComp.output) {
                     for (int i = out[0] + newComp.loc[0] + 1; i < this.rows; i++) {
-                        if (this.cellStates[i][out[1] + newComp.loc[1]] == 3) {
+                        if (isWire(i,out[1] + newComp.loc[1],true)) {
                             break;
                         }
                         this.cellStates[i][out[1] + newComp.loc[1]] = 3;
@@ -147,7 +142,7 @@ public class Board {
             } else if (newComp.rotation == 2) {
                 for (int[] in : newComp.input) {
                     for (int i = newComp.loc[1] + in[1] + 1; i < this.columns; i++) {
-                        if (this.cellStates[in[0] + newComp.loc[0]][i] == 3) {
+                        if (isWire(in[0] + newComp.loc[0],i,false)) {
                             break;
                         }
                         this.cellStates[in[0] + newComp.loc[0]][i] = 3;
@@ -156,7 +151,7 @@ public class Board {
 
                 for (int[] out : newComp.output) {
                     for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
-                        if (this.cellStates[out[0] + newComp.loc[0]][i] == 3) {
+                        if (isWire(out[0] + newComp.loc[0],i,false)) {
                             break;
                         }
                         this.cellStates[out[0] + newComp.loc[0]][i] = 3;
@@ -165,7 +160,7 @@ public class Board {
             } else if (newComp.rotation == 3) {
                 for (int[] in : newComp.input) {
                     for (int i = newComp.loc[0] + in[0] + 1; i < this.rows; i++) {
-                        if (this.cellStates[i][in[1] + newComp.loc[1]] == 3) {
+                        if (isWire(i,in[1] + newComp.loc[1],true)) {
                             break;
                         }
                         this.cellStates[i][in[1] + newComp.loc[1]] = 3;
@@ -173,7 +168,7 @@ public class Board {
                 }
                 for (int[] out : newComp.output) {
                     for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
-                        if (this.cellStates[i][out[1] + newComp.loc[1]] == 3) {
+                        if (isWire(i,out[1] + newComp.loc[1],true)) {
                             break;
                         }
                         this.cellStates[i][out[1] + newComp.loc[1]] = 3;
@@ -182,5 +177,28 @@ public class Board {
             }
         }
     }
+    private boolean isWire(int i,int j,boolean vertical){
+        if(vertical){
+            for(int k=j-1;k<=j+1;k++){
+                if(k<0||k>=this.columns){
+                    continue;
+                }
+                if(this.cellStates[i][k] == 3){
+                    return true;
+                }
+            }
+        }else{
+            for(int k=i-1;k<=i+1;k++){
+                if(k<0||k>=this.rows){
+                    continue;
+                }
+                if(this.cellStates[k][j] == 3){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
 

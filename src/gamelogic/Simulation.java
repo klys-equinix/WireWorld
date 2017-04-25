@@ -37,6 +37,9 @@ public class Simulation {
                 if (line.contains(" ")) {
                     cont = line.split(" ");
                     this.currBoard = new Board(Integer.parseInt(cont[0]), Integer.parseInt(cont[1]));
+                } else if (line.contains(":")) {
+                    cont = line.split("[.:]");
+                    this.currBoard.setCellState(Integer.parseInt(cont[0]),Integer.parseInt(cont[1]),Integer.parseInt(cont[2]));
                 } else {
                     cont = line.split("[.]");
                     if (cont[0].contains("-")) {
@@ -56,8 +59,9 @@ public class Simulation {
                     }
                 }
 
+
             }
-            this.currBoard.drawBoard();
+
         }catch(FileNotFoundException ferr){
             ferr.printStackTrace();
             return;
@@ -93,18 +97,16 @@ public class Simulation {
         while(this.keepRunning){
                 nextGeneration();
                 numGen--;
-                this.currBoard.drawBoard();
         }
 
     }
-    public void start(int numGen){//changed-now there are no constructors specyfying the numGen
+    public void start(int numGen){//changed-now there are no constructors specifying the numGen
         this.numGen=numGen;
 
         if(this.numGen!=0) {
             while (numGen > 0) {
                 nextGeneration();
                 numGen--;
-                this.currBoard.drawBoard();
             }
         }
     }
@@ -112,7 +114,6 @@ public class Simulation {
     public void nextGeneration(){
         if(firstGen){
             this.numGen=numGen;
-            this.currBoard.drawBoard();
             this.memory.add(currBoard);
             for(int i=0; i<currBoard.rows; i++){
                 if(currBoard.getCellState(i,0)==3){
@@ -127,6 +128,7 @@ public class Simulation {
             this.currBoard.drawBoard();
             this.memory.add(currBoard);
             firstGen=false;
+            return;
         }
         Board nextGen = new Board(currBoard.rows,currBoard.columns);
         boolean isDead = true;
@@ -144,6 +146,7 @@ public class Simulation {
             this.keepRunning=false;
         }
         this.currBoard = nextGen;
+        this.currBoard.drawBoard();
         this.memory.add(currBoard);//to be deleted after integration with drawing module
 
     }
@@ -156,8 +159,10 @@ public class Simulation {
             bw.write(currBoard.rows+" "+currBoard.columns+"\n");
             for(int i=0; i<currBoard.rows; i++){
                 for(int j=0; j<currBoard.columns; j++){
-                    if(currBoard.getCellState(i,j)==1||currBoard.getCellState(i,j)==2||currBoard.getCellState(i,j)==3){
+                    if(currBoard.getCellState(i,j)==3){
                         bw.write(i+"."+j+"\n");
+                    }else if(currBoard.getCellState(i,j)==1||currBoard.getCellState(i,j)==2){
+                        bw.write(i+"."+j+":"+currBoard.getCellState(i,j)+"\n");
                     }
                 }
             }
