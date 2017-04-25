@@ -29,7 +29,7 @@ public class Board {
         this.columns = columns;
     }
 
-    public void setCellState(int i, int j, int state) {
+    void setCellState(int i, int j, int state) {
         this.cellStates[i][j] = state;
     }
 
@@ -49,7 +49,7 @@ public class Board {
 
     }
 
-    public int evalCell(int row, int col) {
+    int evalCell(int row, int col) {
         int state;
         int count = 0;
         state = this.cellStates[row][col];
@@ -87,7 +87,7 @@ public class Board {
         }
     }
     // jak zdążę to zrefaktoryzuję, metoda "montująca" komponenty na tablicy (drukująca komponent i jego kable)
-    public void imprintComponent(Component newComp) {//nie spodoba ci się to Szymon więc lepiej nie patrz MACIEK
+    void imprintComponent(Component newComp) {//nie spodoba ci się to Szymon więc lepiej nie patrz MACIEK
         int[][] tempState=new int[this.rows][this.columns];
         for (int i = 0; i < this.cellStates.length; i++) {
             System.arraycopy(this.cellStates[i], 0, tempState[i], 0, this.cellStates[0].length);
@@ -95,8 +95,7 @@ public class Board {
         for (int i = newComp.loc[0]; i < newComp.structure.length + newComp.loc[0]; i++) {
             for (int j = newComp.loc[1]; j < newComp.structure[0].length + newComp.loc[1]; j++) {
                 if (i < 0 || i >= this.rows || j >= this.columns || j < 0) {
-                    System.out.print("component does not fit");//dodać porządny error handling
-                    return;
+                    throw new IndexOutOfBoundsException("Component does not fit in the board");
                 } else {
                     tempState[i][j] = newComp.structure[i - newComp.loc[0]][j - newComp.loc[1]];
                 }
@@ -177,7 +176,7 @@ public class Board {
             }
         }
     }
-    private boolean isWire(int i,int j,boolean vertical){
+    private boolean isWire(int i,int j,boolean vertical){//helper function
         if(vertical){
             for(int k=j-1;k<=j+1;k++){
                 if(k<0||k>=this.columns){

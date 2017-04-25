@@ -43,9 +43,9 @@ public class WireWorld {
         controlFrame.setVisible(true);
         Simulation sim = new Simulation(20,20);//creating a simulation with an empty board
         int[] loc ={5,1};//location of topmost indexes of an element-where should it be placed on the board
-        sim.imprintToBoard("ClockGen",loc,0);
-        int [] nloc ={2,10};
-        sim.imprintToBoard("ExORgate",nloc,2);//imprinting the element on the empty board
+        sim.imprintToBoard("ClockGen",loc,0,false);//imprinting the element on the empty board
+        int [] nloc ={2,10};//location of the second element
+        sim.imprintToBoard("ExORgate",nloc,2,true);//if placed correctly , it will connect itself to other components
         sim.start(10);
         sim.writeGenToFile("newFile");
         Simulation sim1 = new Simulation("./newFile");

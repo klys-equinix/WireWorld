@@ -5,7 +5,8 @@ package gamelogic;
  */
 public class ExORgate extends Component {
 
-    public ExORgate(int rotation, int[] loc) {
+    public ExORgate(int rotation, int[] loc,boolean connected) {
+        this.wire=connected;
         this.loc = loc;
         this.rotation = rotation;
         switch (rotation) {

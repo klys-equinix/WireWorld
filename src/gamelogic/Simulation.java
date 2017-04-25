@@ -83,11 +83,15 @@ public class Simulation {
         this.numGen=0;
     }
 
-    public void imprintToBoard(String compType,int[] loc,int rotation){
+    public void imprintToBoard(String compType,int[] loc,int rotation,boolean isConnected){
         ComponentFactory compFact = new ComponentFactory();
-        Component newComp = compFact.getComponent(compType,loc,rotation);
+        Component newComp = compFact.getComponent(compType,loc,rotation,isConnected);
         if(newComp!=null) {
-            this.currBoard.imprintComponent(newComp);
+            try {
+                this.currBoard.imprintComponent(newComp);
+            }catch(IndexOutOfBoundsException out){
+                System.out.print(out);
+            }
         }
     }
 

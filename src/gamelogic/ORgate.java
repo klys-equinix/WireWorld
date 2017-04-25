@@ -4,9 +4,10 @@ package gamelogic;
  * Created by Konrad on 24.04.2017.
  */
 public class ORgate extends Component {
-    public ORgate(int rotation,int[] loc){
+    public ORgate(int rotation,int[] loc,boolean connected){
         this.loc = loc;
         this.rotation=rotation;
+        this.wire=connected;
         switch (rotation){
             case 0:
                 this.structure= new int [][] {{3,0},

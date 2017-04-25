@@ -4,7 +4,8 @@ package gamelogic;
  * Created by Konrad on 24.04.2017.
  */
 public class Diode extends Component {
-    public Diode(int rotation,int[] loc){
+    public Diode(int rotation,int[] loc,boolean connected){
+            this.wire=connected;
             this.loc = loc;
             this.rotation=rotation;
             switch (rotation){

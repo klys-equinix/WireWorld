@@ -4,8 +4,8 @@ package gamelogic;
  * Created by Konrad on 24.04.2017.
  */
 public class ClockGen extends Component {
-    public ClockGen(int rotation, int[] loc) {
-        this.wire=false;
+    public ClockGen(int rotation, int[] loc,boolean connected) {
+        this.wire=connected;
         this.loc = loc;
         this.rotation = rotation;
         switch (rotation) {
