@@ -22,7 +22,7 @@ public class Simulation {
         this.numGen=0;
     }
 
-    public Simulation(String fileName){
+    public Simulation(String fileName) throws FileException {
         BufferedReader br = null;
         FileReader fr =null;
         try {
@@ -39,7 +39,11 @@ public class Simulation {
                     this.currBoard = new Board(Integer.parseInt(cont[0]), Integer.parseInt(cont[1]));
                 } else if (line.contains(":")) {
                     cont = line.split("[.:]");
-                    this.currBoard.setCellState(Integer.parseInt(cont[0]),Integer.parseInt(cont[1]),Integer.parseInt(cont[2]));
+                    int state=Integer.parseInt(cont[2]);
+                    if(state!=1&&state!=2){
+                        throw new FileException("This value cannot be put on board"+state);
+                    }
+                    this.currBoard.setCellState(Integer.parseInt(cont[0]),Integer.parseInt(cont[1]),state);
                 } else {
                     cont = line.split("[.]");
                     if (cont[0].contains("-")) {
@@ -63,11 +67,9 @@ public class Simulation {
             }
 
         }catch(FileNotFoundException ferr){
-            ferr.printStackTrace();
-            return;
+            throw new FileException("File not found"+ferr.getMessage());
         }catch(IOException err){
-            err.printStackTrace();
-            return;
+            throw new FileException("Failed to load file"+err.getMessage());
         }finally {
             try {
                 if (br != null) {
@@ -77,20 +79,20 @@ public class Simulation {
                     fr.close();
                 }
             }catch(IOException err){
-                err.printStackTrace();
+                throw new FileException("Failed to close readers"+err.getMessage());
             }
         }
         this.numGen=0;
     }
 
-    public void imprintToBoard(String compType,int[] loc,int rotation,boolean isConnected){
+    public void imprintToBoard(String compType,int[] loc,int rotation,boolean isConnected) throws IndexOutOfBoundsException{
         ComponentFactory compFact = new ComponentFactory();
         Component newComp = compFact.getComponent(compType,loc,rotation,isConnected);
         if(newComp!=null) {
             try {
                 this.currBoard.imprintComponent(newComp);
             }catch(IndexOutOfBoundsException out){
-                System.out.print(out);
+                throw new IndexOutOfBoundsException(out.getMessage());
             }
         }
     }
@@ -154,7 +156,7 @@ public class Simulation {
         this.memory.add(currBoard);//to be deleted after integration with drawing module
 
     }
-    public void writeGenToFile(String fileName){
+    public void writeGenToFile(String fileName) throws FileException{
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
@@ -172,11 +174,9 @@ public class Simulation {
             }
 
         }catch(FileNotFoundException ferr){
-            ferr.printStackTrace();
-            return;
+            throw new FileException(ferr.getMessage());
         }catch(IOException err) {
-            err.printStackTrace();
-            return;
+            throw new FileException(err.getMessage());
         }finally {
             try {
                 if (bw != null) {
@@ -198,4 +198,5 @@ public class Simulation {
     public ArrayList<Board> getMemory() {
         return memory;
     }
+
 }
