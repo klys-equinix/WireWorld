@@ -18,6 +18,12 @@ public class WireWorld {
     private static JFrame controlFrame;
     private static JFrame gameFrame;
 
+    private static Simulation sim;
+    private static GamePanel gp;
+
+    private static int genNum;
+    private static ArrayList boardArray;
+
     public static void main(String args[]){
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -61,53 +67,71 @@ public class WireWorld {
         }
         ;
     }
-
+    public static Board getGenBoard(int genNum)
+    {
+        return (Board) boardArray.get(genNum - 1);
+    }
     public static void initGameWindow(String filePath, int genNum) {
-        final int genInt = genNum;
-        Simulation sim;
-        GamePanel gp;
         try {
-           sim = new Simulation(filePath);
-           gp = new GamePanel(sim.getCurrBoard());
-            gameFrame = new JFrame();
-            gameFrame.setContentPane(gp.getPanel());
-            gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            gameFrame.pack();
-            gameFrame.setLocationRelativeTo(null);
-            gameFrame.setVisible(true);
+            sim = new Simulation(filePath);
+        }
+        catch(FileException e)
+        {
+            // To catch
+            return;
+        }
 
-            ArrayList<Board> board = new ArrayList<Board>();
+        SettingsManager.getInstance().setAppFixedGen(genNum);
 
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_FIXED)
-                    {
-                        if(genInt != 0)
-                        {
-                            sim.nextGeneration();
-                            Board board = sim.getCurrBoard();
-                            gp.getBoardRenderer().setBoard(board);
-                            gp.getBoardRenderer().repaint();
-                            //genInt--;
-                        }
-                    }
-                    else {
-                        sim.nextGeneration();
-                        Board board = sim.getCurrBoard();
-                        gp.getBoardRenderer().setBoard(board);
-                        gp.getBoardRenderer().repaint();
-                    }
-                }
-            }, 750, 750);
-            // Closing control frame - no longer needed
-            controlFrame.setVisible(false);
-            controlFrame.dispose();
-        }catch(FileException err){
-            //handle it the way you want
+        gp = new GamePanel(sim.getCurrBoard());
+        gameFrame = new JFrame();
+        gameFrame.setContentPane(gp.getPanel());
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
+        gameFrame.setVisible(true);
+
+        if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_FIXED)
+        {
+            boardArray = new ArrayList<Board>();
+            for(int i = 0; i < genNum; i++) {
+                sim.nextGeneration();
+                boardArray.add(sim.getCurrBoard());
+            }
         }
 
 
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new SimHandler(), 750, 750);
+
+        // Closing control frame - no longer needed
+        controlFrame.setVisible(false);
+        controlFrame.dispose();
+    }
+    static class SimHandler extends TimerTask {
+        @Override
+        public void run() {
+            if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_FIXED)
+            {
+                if(SettingsManager.getInstance().getAppFixedMode() == SettingsManager.APP_FIXED_AUTO) {
+                    if(SettingsManager.getInstance().getAppFixedCurGen() < SettingsManager.getInstance().getAppFixedGen()) {
+                        gp.getGenSlider().setValue(SettingsManager.getInstance().getAppFixedCurGen()+1);
+                        gp.getBoardRenderer().setBoard((Board) boardArray.get(SettingsManager.getInstance().getAppFixedCurGen()));
+                        gp.getBoardRenderer().repaint();
+                        SettingsManager.getInstance().setAppFixedCurGen(SettingsManager.getInstance().getAppFixedCurGen()+1);
+                    }
+                    else
+                        SettingsManager.getInstance().setAppFixedCurGen(0);
+                }
+            }
+            else {
+                sim.nextGeneration();
+                Board board = sim.getCurrBoard();
+                gp.getBoardRenderer().setBoard(board);
+                gp.getBoardRenderer().repaint();
+                gp.getGenField().setText("" + SettingsManager.getInstance().getAppFixedCurGen());
+                SettingsManager.getInstance().setAppFixedCurGen(SettingsManager.getInstance().getAppFixedCurGen()+1);
+            }
+        }
     }
 }
