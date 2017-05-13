@@ -8,4 +8,5 @@ public interface IBoardController {
     public void init(String fileName) throws FileException;
     public void nextGeneration();
     public void writeGenToFile(String fileName) throws FileException;
+    public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException;
 }

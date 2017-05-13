@@ -8,13 +8,6 @@ public class Board {
     public int rows;
     public int columns;
 
-    public int[][] getCellStates() {
-        return cellStates;
-    }
-
-    public void setCellStates(int[][] cellStates) {
-        this.cellStates = cellStates;
-    }
 
     public Board(int rows, int columns) {
         cellStates = new int[rows][columns];
@@ -40,18 +33,14 @@ public class Board {
     public int getCellState(int i, int j) {
         return cellStates[i][j];
     }
-
-    public void drawBoard() {
-        for (int i = 0; i < this.rows; i++) {
-            System.out.print("{");
-            for (int j = 0; j < this.columns; j++) {
-                System.out.print(this.cellStates[i][j] + ",");
-            }
-            System.out.print("}" + "\n");
-        }
-        System.out.print("\n");
-
+    public int[][] getCellStates() {
+        return cellStates;
     }
+    public void setCellStates(int[][] cellStates) {
+        this.cellStates = cellStates;
+    }
+
+
 
 }
 

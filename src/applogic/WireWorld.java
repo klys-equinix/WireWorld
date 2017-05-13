@@ -47,9 +47,9 @@ public class WireWorld {
         try {
             BoardController.getInstance().init(20,20);//creating a simulation with an empty board
             int[] loc = {5, 1};//location of topmost indexes of an element-where should it be placed on the board
-            BoardController.getInstance().imprintToBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
+            BoardController.getInstance().placeOnBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
             int[] nloc = {2, 10};//location of the second element
-            BoardController.getInstance().imprintToBoard("ExORgate", nloc, 2, true);//if placed correctly , it will connect itself to other components
+            BoardController.getInstance().placeOnBoard("ExORgate", nloc, 2, true);//if placed correctly , it will connect itself to other components
             BoardController.getInstance().start(10);
             BoardController.getInstance().writeGenToFile("newFile");
         }catch(IndexOutOfBoundsException err){
@@ -60,7 +60,7 @@ public class WireWorld {
         try {
             BoardController.reset();
             BoardController.getInstance().init("./newFile");
-            BoardController.getInstance().getCurrBoard().drawBoard();
+            BoardController.getInstance().drawBoard();
             BoardController.reset();
         }catch(FileException err){
 
@@ -93,7 +93,7 @@ public class WireWorld {
 
         if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_FIXED)
         {
-            boardArray = new ArrayList<Board>();
+            boardArray = new ArrayList<Board>();//Po co ci boardArray skoro BoardController trzyma w pamieci wszytskie generacje?
             for(int i = 0; i < genNum; i++) {
                 BoardController.getInstance().nextGeneration();
                 boardArray.add(BoardController.getInstance().getCurrBoard());

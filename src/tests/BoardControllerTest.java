@@ -63,9 +63,10 @@ public class BoardControllerTest {
         BoardController.reset();
         BoardController.getInstance().init(20,20);
         int[] loc = {5, 1};//location of topmost indexes of an element-where should it be placed on the board
-        BoardController.getInstance().imprintToBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
+        BoardController.getInstance().placeOnBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
         int[] nloc = {2, 10};//location of the second element
-        BoardController.getInstance().imprintToBoard("ExORgate", nloc, 2, true);
+        BoardController.getInstance().placeOnBoard("ExORgate", nloc, 2, true);
+        BoardController.getInstance().drawBoard();
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(),expImprintBoard);
     }
 
