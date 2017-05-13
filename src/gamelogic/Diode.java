@@ -39,4 +39,5 @@ public class Diode extends Component {
 
     }
 
+
 }

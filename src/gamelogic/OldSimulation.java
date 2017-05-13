@@ -1,31 +1,30 @@
 package gamelogic;
 
-import org.junit.Test;
-
 import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Created by Konrad on 13.05.2017.
+ * Created by Konrad on 20.04.2017.
+ * Deprecated, to be deleted before realese
  */
-public class Simulation {
-    private static Simulation ourInstance = new Simulation();
+@Deprecated
+public class OldSimulation {
     private ArrayList<Board> memory = new ArrayList<>();
     private int numGen;
     private Board currBoard;
     private boolean firstGen=true;
+    public Board getCurrBoard() {
+        return currBoard;
+    }
+
     private boolean keepRunning;
 
-    public static Simulation getInstance() {
-        return ourInstance;
-    }
-    private Simulation(){}
-
-    public void init(int rows, int columns){
+    public OldSimulation(int rows, int columns){
         this.currBoard = new Board(rows,columns);
         this.numGen=0;
     }
-    public void init(String fileName) throws FileException {
+
+    public OldSimulation(String fileName) throws FileException {
         BufferedReader br = null;
         FileReader fr =null;
         try {
@@ -87,6 +86,28 @@ public class Simulation {
         }
         this.numGen=0;
     }
+
+    public void imprintToBoard(String compType,int[] loc,int rotation,boolean isConnected) throws IndexOutOfBoundsException{
+        ComponentFactory compFact = new ComponentFactory();
+        Component newComp = compFact.getComponent(compType,loc,rotation,isConnected);
+        if(newComp!=null) {
+            try {
+                this.currBoard.imprintComponent(newComp);
+            }catch(IndexOutOfBoundsException out){
+                throw new IndexOutOfBoundsException(out.getMessage());
+            }
+        }
+    }
+    @Deprecated
+    public void start(){
+
+        this.keepRunning=true;
+        while(this.keepRunning){
+                nextGeneration();
+                numGen--;
+        }
+
+    }
     @Deprecated
     public void start(int numGen){//changed-now there are no constructors specifying the numGen
         this.numGen=numGen;
@@ -98,6 +119,7 @@ public class Simulation {
             }
         }
     }
+
     public void nextGeneration(){
         if(firstGen){
             this.numGen=numGen;
@@ -171,17 +193,6 @@ public class Simulation {
             }
         }
     }
-    public void imprintToBoard(String compType,int[] loc,int rotation,boolean isConnected) throws IndexOutOfBoundsException{
-        ComponentFactory compFact = new ComponentFactory();
-        Component newComp = compFact.getComponent(compType,loc,rotation,isConnected);
-        if(newComp!=null) {
-            try {
-                this.currBoard.imprintComponent(newComp);
-            }catch(IndexOutOfBoundsException out){
-                throw new IndexOutOfBoundsException(out.getMessage());
-            }
-        }
-    }
     public void stop(){
         this.numGen=0;
         this.keepRunning=false;
@@ -190,9 +201,5 @@ public class Simulation {
     public ArrayList<Board> getMemory() {
         return memory;
     }
-    public Board getCurrBoard() {
-        return currBoard;
-    }
-
 
 }

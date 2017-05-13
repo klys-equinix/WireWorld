@@ -10,4 +10,7 @@ abstract class Component {
         int[][] input;
         int[][] output;
         int[][] structure;
+        public static Board getElement(){
+                return new Board(0,0);
+        }
 }

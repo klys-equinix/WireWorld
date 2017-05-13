@@ -1,8 +1,8 @@
 package applogic;
 
 import gamelogic.FileException;
-import gamelogic.Simulation;
 import gamelogic.Board;
+import gamelogic.Simulation;
 import gui.ControlPanel;
 import gui.GamePanel;
 
@@ -18,7 +18,6 @@ public class WireWorld {
     private static JFrame controlFrame;
     private static JFrame gameFrame;
 
-    private static Simulation sim;
     private static GamePanel gp;
 
     private static int genNum;
@@ -45,8 +44,8 @@ public class WireWorld {
         controlFrame.setLocationRelativeTo(null);
         controlFrame.setResizable(false);
         controlFrame.setVisible(true);
-        try {
-            Simulation sim = new Simulation(20, 20);//creating a simulation with an empty board
+        /*try {
+            OldSimulation sim = new OldSimulation(20, 20);//creating a simulation with an empty board
             int[] loc = {5, 1};//location of topmost indexes of an element-where should it be placed on the board
             sim.imprintToBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
             int[] nloc = {2, 10};//location of the second element
@@ -58,14 +57,14 @@ public class WireWorld {
         }catch(FileException ferr){
             System.out.print(ferr.getMessage());
         }
-        Simulation sim1;
+        OldSimulation sim1;
         try {
-            sim1 = new Simulation("./newFile");
+            sim1 = new OldSimulation("./newFile");
             sim1.getCurrBoard().drawBoard();
         }catch(FileException err){
 
-        }
-        ;
+        }*/
+
     }
     public static Board getGenBoard(int genNum)
     {
@@ -73,7 +72,7 @@ public class WireWorld {
     }
     public static void initGameWindow(String filePath, int genNum) {
         try {
-            sim = new Simulation(filePath);
+            Simulation.getInstance().init(filePath);
         }
         catch(FileException e)
         {
@@ -83,7 +82,7 @@ public class WireWorld {
 
         SettingsManager.getInstance().setAppFixedGen(genNum);
 
-        gp = new GamePanel(sim.getCurrBoard());
+        gp = new GamePanel(Simulation.getInstance().getCurrBoard());
         gameFrame = new JFrame();
         gameFrame.setContentPane(gp.getPanel());
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,8 +94,8 @@ public class WireWorld {
         {
             boardArray = new ArrayList<Board>();
             for(int i = 0; i < genNum; i++) {
-                sim.nextGeneration();
-                boardArray.add(sim.getCurrBoard());
+                Simulation.getInstance().nextGeneration();
+                boardArray.add(Simulation.getInstance().getCurrBoard());
             }
         }
 
@@ -125,8 +124,8 @@ public class WireWorld {
                 }
             }
             else {
-                sim.nextGeneration();
-                Board board = sim.getCurrBoard();
+                Simulation.getInstance().nextGeneration();
+                Board board = Simulation.getInstance().getCurrBoard();
                 gp.getBoardRenderer().setBoard(board);
                 gp.getBoardRenderer().repaint();
                 gp.getGenField().setText("" + SettingsManager.getInstance().getAppFixedCurGen());
