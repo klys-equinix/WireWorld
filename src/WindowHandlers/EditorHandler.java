@@ -73,9 +73,9 @@ public class EditorHandler implements WindowHandler {
                 else if(diodaRadioButton.isSelected())
                     BoardController.getInstance().placeOnBoard("Diode", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
                 else if(bramkaORRadioButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("ORGate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
+                    BoardController.getInstance().placeOnBoard("ORgate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
                 else if(exORButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("ExORGate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
+                    BoardController.getInstance().placeOnBoard("ExORgate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
                 else if(pulsarButton.isSelected())
                     BoardController.getInstance().placeOnBoard("ClockGen", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
                 editorRenderer.setBoard(BoardController.getInstance().getCurrBoard());
