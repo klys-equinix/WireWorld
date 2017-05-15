@@ -43,6 +43,7 @@ public class ControlHandler implements WindowHandler {
     private JTextField backgroundColorField;
     private JButton backgroundColorButton;
     private JTextField genTimeField;
+    private JCheckBox rysujKrawędzieKomórekCheckBox;
 
     private JFrame controlFrame;
 
@@ -52,6 +53,7 @@ public class ControlHandler implements WindowHandler {
         tailElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()));
         headElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()));
         cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
+        backgroundColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()));
         genTimeField.setText(SettingsManager.getInstance().getGameGenTime()+"");
 
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 50, 1);
@@ -155,6 +157,10 @@ public class ControlHandler implements WindowHandler {
                 if(!field.getText().isEmpty())
                     SettingsManager.getInstance().setGameGenTime(Integer.parseInt(field.getText()));
             }
+        });
+        rysujKrawędzieKomórekCheckBox.addActionListener(e -> {
+            JCheckBox comp = (JCheckBox)e.getSource();
+            SettingsManager.getInstance().setGameDrawOutline(comp.isSelected());
         });
     }
 

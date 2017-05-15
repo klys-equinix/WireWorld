@@ -63,6 +63,8 @@ public class GameHandler implements WindowHandler {
             genSlider.setEnabled(false);
             SettingsManager.getInstance().setAppFixedMode(SettingsManager.APP_FIXED_AUTO);
         });
+        scrollPane.setBackground(SettingsManager.getInstance().getGameBackgroundColor());
+        boardRenderer.setBackground(SettingsManager.getInstance().getGameBackgroundColor());
     }
 
     @Override
