@@ -40,6 +40,7 @@ public class SettingsManager {
     private Color gameBackgroundColor;
 
     private int gameGenTime;
+    private boolean gameDrawOutline;
 
     private SettingsManager() {
         gameEleHeadColor = new Color(255, 0, 0);
@@ -48,6 +49,7 @@ public class SettingsManager {
         gameBackgroundColor = new Color(0, 0, 0);
 
         gameGenTime = 500;
+        gameDrawOutline = false;
     }
 
     public static SettingsManager getInstance() {
@@ -175,5 +177,13 @@ public class SettingsManager {
     public void setGameGenTime(int gameGenTime) {
         this.gameGenTime = gameGenTime;
         fireChangedEvent();
+    }
+
+    public boolean getGameDrawOutline() {
+        return gameDrawOutline;
+    }
+
+    public void setGameDrawOutline(boolean gameDrawOutline) {
+        this.gameDrawOutline = gameDrawOutline;
     }
 }
