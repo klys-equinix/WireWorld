@@ -15,7 +15,6 @@ public class BoardController implements IBoardController {
     public static final boolean DEV_MODE = true;
     private static BoardController ourInstance = new BoardController();
     private ArrayList<Board> memory = new ArrayList<>();
-    private int numGen;
     private Board currBoard;
     private boolean firstGen = true;
 
@@ -30,6 +29,7 @@ public class BoardController implements IBoardController {
         return memory;
     }
 
+    @Override
     public Board getCurrBoard() {
         return currBoard;
     }
@@ -41,7 +41,6 @@ public class BoardController implements IBoardController {
     @Override
     public void init(int rows, int columns) {//Initialize an empty board of specified size
         this.currBoard = new Board(rows, columns);
-        this.numGen = 0;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class BoardController implements IBoardController {
                     lineContents = line.split("[.:]");
                     int state = Integer.parseInt(lineContents[2]);
                     if (state != 1 && state != 2) {
-                        throw new FileException("This value cannot be put on board" + state);
+                        throw new FileException("This value cannot be put on board" +":"+ state);
                     }
                     this.currBoard.setCellState(Integer.parseInt(lineContents[0]), Integer.parseInt(lineContents[1]), state);
                 } else {
@@ -85,19 +84,18 @@ public class BoardController implements IBoardController {
         } catch (FileNotFoundException ferr) {
             throw new FileException("File not found" + ferr.getMessage());
         } catch (IOException err) {
-            throw new FileException("Failed to loadSettings file" + err.getMessage());
+            throw new FileException("Failed to load Board file");
         }
-        this.numGen = 0;
     }
 
     @Deprecated
     public void start(int numGen) {//Method existing solely for unit tests
-        this.numGen = numGen;
+        int numGenenerations = numGen;
 
-        if (this.numGen != 0) {
-            while (numGen > 0) {
+        if (numGenenerations != 0) {
+            while (numGenenerations > 0) {
                 nextGeneration();
-                numGen--;
+                numGenenerations--;
             }
         }
     }
@@ -182,7 +180,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    public int evalCell(int row, int col) {
+    private int evalCell(int row, int col) {
         int state;
         int count = 0;
         state = currBoard.getCellState(row, col);
@@ -219,7 +217,8 @@ public class BoardController implements IBoardController {
             return 3;
         }
     }
-    public void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
+
+    private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
         int[][] tempState = new int[currBoard.rows][currBoard.columns];
         for (int i = 0; i < currBoard.getCellStates().length; i++) {
             System.arraycopy(currBoard.getCellStates()[i], 0, tempState[i], 0, currBoard.getCellStates()[0].length);
@@ -309,7 +308,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    public boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
+    private boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
                 if (k < 0 || k >= currBoard.columns) {

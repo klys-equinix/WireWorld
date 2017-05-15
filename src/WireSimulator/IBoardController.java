@@ -1,5 +1,7 @@
 package WireSimulator;
 
+import WireComponents.Board;
+import WireComponents.Component;
 import WireComponents.FileException;
 
 /**
@@ -11,4 +13,5 @@ public interface IBoardController {
     public void nextGeneration();
     public void writeGenToFile(String fileName) throws FileException;
     public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException;
+    public Board getCurrBoard();
 }
