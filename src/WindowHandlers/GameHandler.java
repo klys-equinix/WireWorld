@@ -37,7 +37,6 @@ public class GameHandler implements WindowHandler {
 
         zoomSlider.addChangeListener(e -> {
             if (!((JSlider) e.getSource()).getValueIsAdjusting()) {
-                System.out.println(((JSlider) e.getSource()).getValue());
                 boardRenderer.setZoom(((JSlider) e.getSource()).getValue());
             }
         });

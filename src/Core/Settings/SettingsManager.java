@@ -49,7 +49,7 @@ public class SettingsManager {
         gameBackgroundColor = new Color(0, 0, 0);
 
         gameGenTime = 500;
-        gameDrawOutline = false;
+        gameDrawOutline = true;
     }
 
     public static SettingsManager getInstance() {

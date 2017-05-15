@@ -10,14 +10,14 @@ import java.awt.*;
  * Created by Szymon on 23.04.2017.
  */
 public class BoardRenderer extends JPanel {
-    private Board board;
-    private int zoom = 1;
+    Board board;
+    int zoom = 1;
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g1 = (Graphics2D) g;
-        //g1.scale(zoom, zoom);
+
         if(board == null)
             return;
 
@@ -65,5 +65,4 @@ public class BoardRenderer extends JPanel {
     {
         this.board = board;
     }
-
 }
