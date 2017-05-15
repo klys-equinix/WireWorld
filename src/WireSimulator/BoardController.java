@@ -1,4 +1,9 @@
-package gamelogic;
+package WireSimulator;
+
+import WireComponents.Board;
+import WireComponents.Component;
+import WireComponents.ComponentFactory;
+import WireComponents.FileException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -80,7 +85,7 @@ public class BoardController implements IBoardController {
         } catch (FileNotFoundException ferr) {
             throw new FileException("File not found" + ferr.getMessage());
         } catch (IOException err) {
-            throw new FileException("Failed to load file" + err.getMessage());
+            throw new FileException("Failed to loadSettings file" + err.getMessage());
         }
         this.numGen = 0;
     }
@@ -177,7 +182,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    private int evalCell(int row, int col) {
+    public int evalCell(int row, int col) {
         int state;
         int count = 0;
         state = currBoard.getCellState(row, col);
@@ -214,7 +219,7 @@ public class BoardController implements IBoardController {
             return 3;
         }
     }
-    private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
+    public void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
         int[][] tempState = new int[currBoard.rows][currBoard.columns];
         for (int i = 0; i < currBoard.getCellStates().length; i++) {
             System.arraycopy(currBoard.getCellStates()[i], 0, tempState[i], 0, currBoard.getCellStates()[0].length);
@@ -304,7 +309,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    private boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
+    public boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
                 if (k < 0 || k >= currBoard.columns) {

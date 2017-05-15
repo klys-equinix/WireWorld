@@ -1,7 +1,7 @@
-package gui.BoardRenderer;
+package WindowHandlers.BoardRenderer;
 
-import applogic.SettingsManager;
-import gamelogic.Board;
+import Core.Settings.SettingsManager;
+import WireComponents.Board;
 
 import javax.swing.*;
 import java.awt.*;

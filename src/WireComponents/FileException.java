@@ -1,4 +1,4 @@
-package gamelogic;
+package WireComponents;
 
 /**
  * Created by Konrad on 28.04.2017.

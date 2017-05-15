@@ -1,4 +1,6 @@
-package gamelogic;
+package WireSimulator;
+
+import WireComponents.FileException;
 
 /**
  * Created by Konrad on 13.05.2017.

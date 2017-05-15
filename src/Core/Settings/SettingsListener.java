@@ -1,4 +1,4 @@
-package applogic;
+package Core.Settings;
 
 /**
  * Created by Szymon on 09.05.2017.

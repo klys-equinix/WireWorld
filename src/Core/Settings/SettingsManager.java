@@ -1,5 +1,8 @@
-package applogic;
+package Core.Settings;
 
+import Core.Utils.Utils;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -34,64 +37,24 @@ public class SettingsManager {
     private Color gameEleHeadColor;
     private Color gameEleTailColor;
     private Color gameCableColor;
+    private Color gameBackgroundColor;
+
+    private int gameGenTime;
 
     private SettingsManager() {
         gameEleHeadColor = new Color(255, 0, 0);
         gameEleTailColor = new Color(255, 255, 0);
         gameCableColor = new Color(255, 255, 255);
+        gameBackgroundColor = new Color(0, 0, 0);
+
+        gameGenTime = 500;
     }
 
     public static SettingsManager getInstance() {
         return setman;
     }
 
-    public void loadFromFile(File f)
-    {
-        FileReader fr;
-        try {
-            fr = new FileReader(f);
-        }
-        catch(FileNotFoundException e)
-        {
-            // TODO
-            return;
-        }
-        BufferedReader br = new BufferedReader(fr);
-        try {
-            this.load(br);
-            br.close();
-            fr.close();
-        }
-        catch(IOException e)
-        {
-            // TODO
-        }
-    }
-
-    public void saveToFile(File f)
-    {
-        FileWriter fw;
-        try {
-           fw = new FileWriter(f);
-        }
-        catch(IOException e)
-        {
-            // TODO
-            return;
-        }
-        BufferedWriter bw = new BufferedWriter(fw);
-        this.save(bw);
-        try {
-            bw.close();
-            fw.close();
-        }
-        catch(IOException e)
-        {
-            // TODO
-        }
-    }
-
-    private void load(BufferedReader br) throws IOException
+    public void loadSettings(BufferedReader br) throws IOException
     {
         String str;
         while((str = br.readLine()) != null) {
@@ -105,23 +68,23 @@ public class SettingsManager {
                     SettingsManager.getInstance().setGameEleHeadColor(Utils.getColorFromVector(var[2]));
                 else if (var[1].equals("CABLE"))
                     SettingsManager.getInstance().setGameCableColor(Utils.getColorFromVector(var[2]));
+                else if (var[1].equals("BACKGROUND"))
+                    SettingsManager.getInstance().setGameBackgroundColor(Utils.getColorFromVector(var[2]));
+            }
+            if(var[0].equals("SIM")) {
+            if (var[1].equals("TIME"))
+                SettingsManager.getInstance().setGameGenTime(Integer.parseInt(var[2]));
             }
         }
     }
 
-    private void save(BufferedWriter bw)
-    {
+    public void saveSettings(BufferedWriter bw) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("COLOR:TAIL:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()))
                 .append("\n").append("COLOR:HEAD:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()))
-                .append("\n").append("COLOR:CABLE:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
-        try{
-            bw.write(sb.toString());
-        }
-        catch(IOException e)
-        {
-            // TODO
-        }
+                .append("\n").append("COLOR:CABLE:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()))
+                .append("\nSIM:TIME").append(SettingsManager.getInstance().getGameGenTime());
+        bw.write(sb.toString());
     }
 
     private void fireChangedEvent()
@@ -193,6 +156,24 @@ public class SettingsManager {
 
     public void setAppFixedCurGen(int appFixedCurGen) {
         this.appFixedCurGen = appFixedCurGen;
+        fireChangedEvent();
+    }
+
+    public Color getGameBackgroundColor() {
+        return gameBackgroundColor;
+    }
+
+    public void setGameBackgroundColor(Color gameBackgroundColor) {
+        this.gameBackgroundColor = gameBackgroundColor;
+        fireChangedEvent();
+    }
+
+    public int getGameGenTime() {
+        return gameGenTime;
+    }
+
+    public void setGameGenTime(int gameGenTime) {
+        this.gameGenTime = gameGenTime;
         fireChangedEvent();
     }
 }

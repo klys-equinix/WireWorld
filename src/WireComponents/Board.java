@@ -1,4 +1,4 @@
-package gamelogic;
+package WireComponents;
 
 /**
  * Created by Konrad on 20.04.2017.
@@ -26,7 +26,7 @@ public class Board {
         this.columns = columns;
     }
 
-    void setCellState(int i, int j, int state) {
+    public void setCellState(int i, int j, int state) {
         this.cellStates[i][j] = state;
     }
 

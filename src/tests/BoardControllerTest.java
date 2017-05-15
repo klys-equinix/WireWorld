@@ -1,10 +1,11 @@
 package tests;
 
+import WireSimulator.BoardController;
 import org.junit.*;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
-import gamelogic.*;
+
 /**
  * Created by Konrad on 23.04.2017.
  */

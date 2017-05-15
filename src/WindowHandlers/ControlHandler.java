@@ -1,26 +1,32 @@
-package gui;
+package WindowHandlers;
 
-import applogic.SettingsListener;
-import applogic.SettingsManager;
-import applogic.Utils;
+import Core.*;
+import Core.Settings.SettingsManager;
+import Core.Utils.Utils;
+import com.sun.scenario.Settings;
 
 import javax.swing.*;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * Created by Szymon on 23.04.2017.
  */
-public class ControlPanel {
-    private JButton wczytajButton;
+public class ControlHandler implements WindowHandler {
+    private JButton loadBoardButton;
     private JSpinner spinnerGenNum;
-    private JTextField textFileDir;
-    private JButton generujButton;
-    private JPanel mainPanel;
-    private JRadioButton nieograniczonaTylkoPodglądRadioButton;
-    private JRadioButton ustalonaLiczbaGeneracjiRadioButton;
+    private JTextField boardDirField;
+    private JButton generateButton;
+    private JRadioButton infiniteRadioButton;
+    private JRadioButton fixedRadioButton;
     private JPanel optionsPanel;
     private JPanel fixedOptPanels;
     private JTextField headElecColorField;
@@ -31,45 +37,52 @@ public class ControlPanel {
     private JButton cableColorButton;
     private JButton wczytajKonfiguracjęButton;
     private JButton zapiszKonfiguracjęButton;
+    private JButton runEditorButton;
     private JFileChooser fc = new JFileChooser();
+    private JPanel contentPanel;
+    private JTextField backgroundColorField;
+    private JButton backgroundColorButton;
+    private JTextField genTimeField;
+
+    private JFrame controlFrame;
 
     private String filePath;
 
-    public ControlPanel() {
+    public ControlHandler() {
         tailElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()));
         headElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()));
         cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
+        genTimeField.setText(SettingsManager.getInstance().getGameGenTime()+"");
 
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 50, 1);
         spinnerGenNum.setModel(model);
-        wczytajButton.addActionListener(e -> {
+        loadBoardButton.addActionListener(e -> {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                textFileDir.setText(file.getName());
+                boardDirField.setText(file.getName());
                 filePath = file.getAbsolutePath();
                 maintainGenButton();
             }
         });
         spinnerGenNum.addChangeListener(e -> maintainGenButton());
-        generujButton.addActionListener(e -> {
+        generateButton.addActionListener(e -> {
             SettingsManager setman = SettingsManager.getInstance();
-            if (ustalonaLiczbaGeneracjiRadioButton.isSelected())
+            if (fixedRadioButton.isSelected())
                 setman.setAppMode(SettingsManager.APP_MODE_FIXED);
             else
                 setman.setAppMode(SettingsManager.APP_MODE_INF);
 
             // Time to open next window
-            applogic.WireWorld.initGameWindow(filePath, (int) spinnerGenNum.getValue());
-            System.out.println("WireWorld GW: "+filePath+","+spinnerGenNum.getValue());
+            Core.WireWorld.runGame(filePath, (int) spinnerGenNum.getValue());
         });
-        nieograniczonaTylkoPodglądRadioButton.addItemListener(e -> {
+        infiniteRadioButton.addItemListener(e -> {
             JRadioButton j = (JRadioButton) e.getSource();
             if (j.isEnabled())
                 fixedOptPanels.setVisible(false);
             maintainGenButton();
         });
-        ustalonaLiczbaGeneracjiRadioButton.addItemListener(e -> {
+        fixedRadioButton.addItemListener(e -> {
             JRadioButton j = (JRadioButton) e.getSource();
             if (j.isEnabled())
                 fixedOptPanels.setVisible(true);
@@ -77,8 +90,8 @@ public class ControlPanel {
         });
 
         ButtonGroup group = new ButtonGroup();
-        group.add(nieograniczonaTylkoPodglądRadioButton);
-        group.add(ustalonaLiczbaGeneracjiRadioButton);
+        group.add(infiniteRadioButton);
+        group.add(fixedRadioButton);
         headColorButton.addActionListener(e -> {
             Color newColor = JColorChooser.showDialog(null, "Wybierz kolor głowy elektronu", new Color(255, 255 ,255));
             if(newColor != null)
@@ -107,7 +120,7 @@ public class ControlPanel {
             JFileChooser fileChooser = new JFileChooser();
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                SettingsManager.getInstance().saveToFile(file);
+                Utils.saveSettingsToFile(file);
                 JOptionPane.showMessageDialog(null,"Konfiguracja została pomyślnie zapisana!","WireWorld - zapis konfiguracji",JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -115,34 +128,84 @@ public class ControlPanel {
             tailElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()));
             headElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()));
             cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
+            genTimeField.setText(SettingsManager.getInstance().getGameGenTime()+"");
         });
         wczytajKonfiguracjęButton.addActionListener(e -> {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                SettingsManager.getInstance().loadFromFile(fc.getSelectedFile());
+                Utils.loadSettingsFromFile(fc.getSelectedFile());
                 JOptionPane.showMessageDialog(null,"Konfiguracja została pomyślnie wczytana!","WireWorld - odczyt konfiguracji",JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        runEditorButton.addActionListener(e -> WireWorld.runEditor());
+        backgroundColorButton.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", new Color(255, 255 ,255));
+            if(newColor != null)
+            {
+                backgroundColorField.setText(Utils.getColorAsVector(newColor));
+                SettingsManager.getInstance().setGameBackgroundColor(newColor);
+            }
+        });
+
+        genTimeField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                JTextField field = (JTextField) e.getSource();
+                if(!field.getText().isEmpty())
+                    SettingsManager.getInstance().setGameGenTime(Integer.parseInt(field.getText()));
             }
         });
     }
 
     private void maintainGenButton() {
-        if (ustalonaLiczbaGeneracjiRadioButton.isSelected()) {
+        if (fixedRadioButton.isSelected()) {
             if ((Integer) spinnerGenNum.getValue() != 0) {
-                if (textFileDir.getText().isEmpty() == false) {
-                    if (generujButton.isEnabled() == false)
-                        generujButton.setEnabled(true);
+                if (boardDirField.getText().isEmpty() == false) {
+                    if (generateButton.isEnabled() == false)
+                        generateButton.setEnabled(true);
                 }
-            } else if (generujButton.isEnabled() == true)
-                generujButton.setEnabled(false);
+            } else if (generateButton.isEnabled() == true)
+                generateButton.setEnabled(false);
         } else {
-            if (textFileDir.getText().isEmpty() == false) {
-                if (generujButton.isEnabled() == false)
-                    generujButton.setEnabled(true);
+            if (boardDirField.getText().isEmpty() == false) {
+                if (generateButton.isEnabled() == false)
+                    generateButton.setEnabled(true);
             }
         }
     }
 
-    public JPanel getPanel() {
-        return this.mainPanel;
+    @Override
+    public void createWindow() {
+        controlFrame = new JFrame();
+        controlFrame.setContentPane(this.getContentPanel());
+        controlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        controlFrame.setTitle("WireWorld - ustawienia");
+        controlFrame.pack();
+        controlFrame.setLocationRelativeTo(null);
+        controlFrame.setResizable(false);
+        controlFrame.setVisible(true);
+    }
+
+    @Override
+    public void destroyWindow() {
+        if(controlFrame.isVisible() == true)
+            controlFrame.setVisible(false);
+        controlFrame.dispose();
+    }
+
+    @Override
+    public void showWindow() {
+        controlFrame.setVisible(true);
+    }
+
+    @Override
+    public void hideWindow() {
+        controlFrame.setVisible(false);
+    }
+
+    @Override
+    public JPanel getContentPanel() {
+        return contentPanel;
     }
 }
