@@ -1,5 +1,8 @@
 package Core;
 
+import WireComponents.Board;
+import WireComponents.ComponentBoardFactory;
+
 import javax.swing.*;
 
 /**
@@ -17,6 +20,14 @@ public class DesktopLauncher {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+        ComponentBoardFactory fact = new ComponentBoardFactory();//Przykład użycia, tworzy Boarda z wydrukowaną diodą, zerową rotacją i bez podłączenia
+        Board blabla = fact.getBoardComponent("Diode");
+
+
+
 
         WireWorld ww = new WireWorld();
         ww.runControl();

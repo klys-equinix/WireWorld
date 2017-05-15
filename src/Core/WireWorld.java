@@ -35,7 +35,7 @@ public class WireWorld {
     {
         try {
             BoardController.getInstance().init(filePath);
-        } catch (FileException e) {
+        } catch (FileException e) {//Ten wyjątek ma całkiem konkretne wiadomości o tym co się stało - drukuj e.getMessage();
             JOptionPane.showMessageDialog(null,"Wystąpił problem w czasie odczytywania pliku z matrycą!","WireWorld - błąd!", JOptionPane.ERROR_MESSAGE);
             return;
         }
