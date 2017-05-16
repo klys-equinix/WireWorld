@@ -1,9 +1,11 @@
 package WireComponents;
 
+import java.io.Serializable;
+
 /**
  * Created by Konrad on 20.04.2017.
  */
-public class Board {
+public class Board implements Serializable {//Model for our application
     private int[][] cellStates;
     public int rows;
     public int columns;
@@ -20,7 +22,7 @@ public class Board {
         this.columns = columns;
     }
 
-    public Board(int[][] cellStates, int rows, int columns) {
+    Board(int[][] cellStates, int rows, int columns) {
         this.cellStates = cellStates;
         this.rows = rows;
         this.columns = columns;

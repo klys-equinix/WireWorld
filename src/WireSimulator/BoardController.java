@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * Created by Konrad on 13.05.2017.
  */
 public class BoardController implements IBoardController {
-    public static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = true;
     private static BoardController ourInstance = new BoardController();
-    private ArrayList<Board> memory = new ArrayList<>();
-    private Board currBoard;
+    private ArrayList<Board> memory = new ArrayList<>();//Holds all generations apart from the current one
+    private Board currBoard;//Holds current generation
     private boolean firstGen = true;
 
     private BoardController() {
@@ -44,7 +44,24 @@ public class BoardController implements IBoardController {
     }
 
     @Override
-    public void init(String fileName) throws FileException {//Initialize a board with a structure specified in a file
+    public void init(String fileName) throws FileException {//Initialize a board from a file with a Board object
+        FileInputStream fis = null;
+        ObjectInputStream in = null;
+        Board readBoard=null;
+        try {
+            fis = new FileInputStream(fileName);
+            in = new ObjectInputStream(fis);
+            readBoard = (Board) in.readObject();
+            in.close();
+        } catch (Exception ex) {
+            throw new FileException("Cannot read file" + ex.getStackTrace());
+        }
+        if(readBoard!=null){
+            this.currBoard=readBoard;
+        }
+    }
+
+    public void readFromUserFormat(String fileName) throws FileException {//Read board from a file of understandable format
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -135,7 +152,7 @@ public class BoardController implements IBoardController {
         this.memory.add(currBoard);
 
     }
-    public void drawBoard() {
+    public void drawBoard() {//Method drawing a board in console, for debbuging/DEV_MODE
         for (int i = 0; i < currBoard.rows; i++) {
             System.out.print("{");
             for (int j = 0; j < currBoard.columns; j++) {
@@ -146,8 +163,7 @@ public class BoardController implements IBoardController {
         System.out.print("\n");
 
     }
-    @Override
-    public void writeGenToFile(String fileName) throws FileException {//Writing the current generetion to a file which can be loaded later
+    public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write(currBoard.rows + " " + currBoard.columns + "\n");
             for (int i = 0; i < currBoard.rows; i++) {
@@ -166,21 +182,39 @@ public class BoardController implements IBoardController {
             throw new FileException(err.getMessage());
         }
     }
+    @Override
+    public void writeGenToFile(String fileName) throws FileException{//Writing the current generation to a file as a Board object
 
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    FileOutputStream fos = null;
+                    ObjectOutputStream out = null;
+                    try {
+                        fos = new FileOutputStream(fileName);
+                        out = new ObjectOutputStream(fos);
+                        out.writeObject(currBoard);
+                        out.close();
+                    } catch (Exception ex) {
+                    }
+                }
+            }).start();
+
+    }
     @Override
     public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {//Producing a component element, and than placing it on board
         ComponentFactory compFact = new ComponentFactory();
         Component newComp = compFact.getComponent(compType, loc, rotation, isConnected);
         if (newComp != null) {
             try {
-                imprintComponent(newComp);//actually handling the printing of an component
+                imprintComponent(newComp);//Actually handling the printing of an component
             } catch (IndexOutOfBoundsException out) {
                 throw new IndexOutOfBoundsException(out.getMessage());
             }
         }
     }
 
-    private int evalCell(int row, int col) {
+    private int evalCell(int row, int col) {//Evaluating the value a cell will have in the coming generation
         int state;
         int count = 0;
         state = currBoard.getCellState(row, col);
@@ -233,82 +267,91 @@ public class BoardController implements IBoardController {
             }
         }
         currBoard.setCellStates(tempState);
-        if (newComp.wire) {//Wireing the component if requested
-            if (newComp.rotation == 0) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
-                        if (isWire(in[0] + newComp.loc[0], i, false)) {
-                            break;
+        if (newComp.wire) {//Wiring the component if requested
+            switch (newComp.rotation) {
+                case 0: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
+                            if (isWire(in[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                     }
-                }
 
-                for (int[] out : newComp.output) {
-                    for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.columns; i++) {
-                        if (isWire(out[0] + newComp.loc[0], i, false)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.columns; i++) {
+                            if (isWire(out[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 1) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
-                        if (isWire(i, in[1] + newComp.loc[1], true)) {
-                            break;
+                case 1: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
+                            if (isWire(i, in[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, in[i] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, in[i] + newComp.loc[1], 3);
                     }
-                }
-                for (int[] out : newComp.output) {
-                    for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.rows; i++) {
-                        if (isWire(i, out[1] + newComp.loc[1], true)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.rows; i++) {
+                            if (isWire(i, out[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 2) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.columns; i++) {
-                        if (isWire(in[0] + newComp.loc[0], i, false)) {
-                            break;
+                case 2: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.columns; i++) {
+                            if (isWire(in[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                     }
-                }
 
-                for (int[] out : newComp.output) {
-                    for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
-                        if (isWire(out[0] + newComp.loc[0], i, false)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
+                            if (isWire(out[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 3) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.rows; i++) {
-                        if (isWire(i, in[1] + newComp.loc[1], true)) {
-                            break;
+                case 3: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.rows; i++) {
+                            if (isWire(i, in[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, in[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, in[1] + newComp.loc[1], 3);
                     }
-                }
-                for (int[] out : newComp.output) {
-                    for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
-                        if (isWire(i, out[1] + newComp.loc[1], true)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
+                            if (isWire(i, out[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                     }
+                    break;
                 }
             }
         }
     }
 
-    private boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
+    private boolean isWire(int i, int j, boolean vertical) {//Helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
                 if (k < 0 || k >= currBoard.columns) {

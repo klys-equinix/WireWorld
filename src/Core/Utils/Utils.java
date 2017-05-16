@@ -68,22 +68,19 @@ public class Utils {
         }
     }
     public static void writeGenToFile(String fileName, Board currBoard) throws FileException {//Writing the current generetion to a file which can be loaded later
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
-            bw.write(currBoard.rows + " " + currBoard.columns + "\n");
-            for (int i = 0; i < currBoard.rows; i++) {
-                for (int j = 0; j < currBoard.columns; j++) {
-                    if (currBoard.getCellState(i, j) == 3) {
-                        bw.write(i + "." + j + "\n");
-                    } else if (currBoard.getCellState(i, j) == 1 || currBoard.getCellState(i, j) == 2) {
-                        bw.write(i + "." + j + ":" + currBoard.getCellState(i, j) + "\n");
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                FileOutputStream fos = null;
+                ObjectOutputStream out = null;
+                try {
+                    fos = new FileOutputStream(fileName);
+                    out = new ObjectOutputStream(fos);
+                    out.writeObject(currBoard);
+                    out.close();
+                } catch (Exception ex) {
                 }
             }
-
-        } catch (FileNotFoundException ferr) {
-            throw new FileException(ferr.getMessage());
-        } catch (IOException err) {
-            throw new FileException(err.getMessage());
-        }
+        }).start();
     }
 }

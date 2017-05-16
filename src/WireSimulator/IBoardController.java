@@ -7,7 +7,7 @@ import WireComponents.FileException;
 /**
  * Created by Konrad on 13.05.2017.
  */
-public interface IBoardController {
+public interface IBoardController {//BoardController interface, to allow BoardController interchangeability
     public void init(int rows, int columns);
     public void init(String fileName) throws FileException;
     public void nextGeneration();
