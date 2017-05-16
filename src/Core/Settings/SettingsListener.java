@@ -1,7 +1,10 @@
 package Core.Settings;
 
+
 /**
- * Created by Szymon on 09.05.2017.
+ * <h1>SettingsListener</h1>
+ * Interface of "OnSettingsChanged" listener
+ * @author Szymon "Aitwar" Chmal
  */
 public interface SettingsListener {
     void changed();

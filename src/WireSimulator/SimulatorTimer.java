@@ -6,7 +6,8 @@ import WindowHandlers.GameHandler;
 import java.util.TimerTask;
 
 /**
- * Created by Szymon on 12.05.2017.
+ * <h1>SimulatorTimer</h1>
+ * Class maintaining simulation proccess and GUI updating.
  */
 public class SimulatorTimer extends TimerTask {
     private GameHandler gameHandler;

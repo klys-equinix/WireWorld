@@ -5,38 +5,54 @@ import WindowHandlers.GameHandler;
 import WireComponents.FileException;
 import WindowHandlers.ControlHandler;
 import WindowHandlers.EditorHandler;
-import WireSimulator.SimulatorTimer;
 import WireSimulator.BoardController;
 
 import javax.swing.*;
-import java.util.Timer;
 
 /**
- * Created by Konrad on 20.04.2017.
+ * <h1>WireWorld</h1>
+ * Class used to control app at low-level base..
+ * @author Szymon "Aitwar" Chmal
  */
 public class WireWorld {
     private static EditorHandler editorHandler;
     private static ControlHandler controlHandler;
     private static GameHandler gameHandler;
 
+    /**
+     * Method used to prepare editor logic, create and show editor window.
+     * @return Nothing.
+     */
     static public void runEditor()
     {
         editorHandler = new EditorHandler();
         editorHandler.createWindow();
         editorHandler.showWindow();
     }
+
+    /**
+     * Method used to prepare game settings logic, create and show settings window.
+     * @return Nothing.
+     */
     static public void runControl()
     {
         controlHandler = new ControlHandler();
         controlHandler.createWindow();
         controlHandler.showWindow();
     }
+
+    /**
+     * Method used to prepare game logic, create and show game window.
+     * @param filePath Path to file with board saved inside.
+     * @param genNum Number of generations to generate (unused when app mode equals infinite)
+     * @return Nothing.
+     */
     static public void runGame(String filePath, int genNum)
     {
         try {
             BoardController.getInstance().init(filePath);
-        } catch (FileException e) {//Ten wyjątek ma całkiem konkretne wiadomości o tym co się stało - drukuj e.getMessage();
-            JOptionPane.showMessageDialog(null,"Wystąpił problem w czasie odczytywania pliku z matrycą!","WireWorld - błąd!", JOptionPane.ERROR_MESSAGE);
+        } catch (FileException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(),"WireWorld - błąd!", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

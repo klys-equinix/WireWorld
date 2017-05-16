@@ -8,10 +8,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
+
 /**
- * Created by Szymon on 09.05.2017.
+ * <h1>Utility</h1>
+ * The collection of utility functions.
+ * @author Szymon "V3RON" Chmal
  */
 public class Utils {
+
+    /**
+     * Get color as vector (pattern: [r,g,b])
+     * @param color Color to be converted
+     * @return String (pattern: [r,g,b])
+     */
     public static String getColorAsVector(Color color)
     {
         return new StringBuilder("[")
@@ -21,6 +30,11 @@ public class Utils {
                 .toString();
     }
 
+    /**
+     * Get color from vector (pattern: [r,g,b])
+     * @param vector Vector to be converted
+     * @return Color object
+     */
     public static Color getColorFromVector(String vector)
     {
         vector = vector.substring(1, vector.length()-1);
@@ -28,6 +42,10 @@ public class Utils {
         return new Color(Integer.parseInt(rgb[0]), Integer.parseInt(rgb[1]), Integer.parseInt(rgb[2]));
     }
 
+    /**
+     * Load settings from compatible file.
+     * @param f File to load from
+     */
     public static void loadSettingsFromFile(File f)
     {
         FileReader fr;
@@ -52,6 +70,10 @@ public class Utils {
         }
     }
 
+    /**
+     * Save settings to compatible file.
+     * @param f File to save to
+     */
     public static void saveSettingsToFile(File f)
     {
         FileWriter fw;
@@ -67,19 +89,20 @@ public class Utils {
             JOptionPane.showMessageDialog(null,"Wystąpił problem w czasie zapisu konfiguracji!","WireWorld - zapis konfiguracji",JOptionPane.ERROR_MESSAGE);
         }
     }
-    public static void writeGenToFile(String fileName, Board currBoard) throws FileException {//Writing the current generetion to a file which can be loaded later
-        new Thread(new Runnable() {
-            @Override
-            public void run(){
-                FileOutputStream fos = null;
-                ObjectOutputStream out = null;
-                try {
-                    fos = new FileOutputStream(fileName);
-                    out = new ObjectOutputStream(fos);
-                    out.writeObject(currBoard);
-                    out.close();
-                } catch (Exception ex) {
-                }
+
+    /**
+     * Todo
+     */
+    public static void writeGenToFile(String fileName, Board currBoard) throws FileException {
+        new Thread(() -> {
+            FileOutputStream fos = null;
+            ObjectOutputStream out = null;
+            try {
+                fos = new FileOutputStream(fileName);
+                out = new ObjectOutputStream(fos);
+                out.writeObject(currBoard);
+                out.close();
+            } catch (Exception ex) {
             }
         }).start();
     }
