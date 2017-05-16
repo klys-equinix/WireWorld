@@ -111,6 +111,6 @@ public class GameHandler implements WindowHandler {
 
     public void setGenField(int value)
     {
-        genField.setText(value+"");
+        genField.setText(Integer.toString(value));
     }
 }

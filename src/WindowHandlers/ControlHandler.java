@@ -9,13 +9,12 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by Szymon on 23.04.2017.
@@ -42,7 +41,7 @@ public class ControlHandler implements WindowHandler {
     private JPanel contentPanel;
     private JTextField backgroundColorField;
     private JButton backgroundColorButton;
-    private JTextField genTimeField;
+    private JFormattedTextField genTimeField;
     private JCheckBox rysujKrawędzieKomórekCheckBox;
 
     private JFrame controlFrame;
@@ -54,7 +53,8 @@ public class ControlHandler implements WindowHandler {
         headElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()));
         cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
         backgroundColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()));
-        genTimeField.setText(SettingsManager.getInstance().getGameGenTime()+"");
+        genTimeField.setText(Integer.toString(SettingsManager.getInstance().getGameGenTime()));
+        rysujKrawędzieKomórekCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
 
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 50, 1);
         spinnerGenNum.setModel(model);
@@ -130,7 +130,9 @@ public class ControlHandler implements WindowHandler {
             tailElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()));
             headElecColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()));
             cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
-            genTimeField.setText(SettingsManager.getInstance().getGameGenTime()+"");
+            backgroundColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()));
+            genTimeField.setText(Integer.toString(SettingsManager.getInstance().getGameGenTime()));
+            rysujKrawędzieKomórekCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
         });
         wczytajKonfiguracjęButton.addActionListener(e -> {
             int returnVal = fc.showOpenDialog(null);
@@ -213,5 +215,17 @@ public class ControlHandler implements WindowHandler {
     @Override
     public JPanel getContentPanel() {
         return contentPanel;
+    }
+
+    private void createUIComponents() {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+        DecimalFormat decimalFormat = (DecimalFormat) numberFormat;
+        decimalFormat.setGroupingUsed(false);
+        NumberFormatter formatter = new NumberFormatter(decimalFormat);
+        formatter.setMinimum(0);
+        formatter.setMaximum(100000);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);
+        genTimeField = new JFormattedTextField(formatter);
     }
 }

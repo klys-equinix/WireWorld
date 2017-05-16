@@ -74,8 +74,12 @@ public class SettingsManager {
                     SettingsManager.getInstance().setGameBackgroundColor(Utils.getColorFromVector(var[2]));
             }
             if(var[0].equals("SIM")) {
-            if (var[1].equals("TIME"))
-                SettingsManager.getInstance().setGameGenTime(Integer.parseInt(var[2]));
+                if (var[1].equals("TIME"))
+                    SettingsManager.getInstance().setGameGenTime(Integer.parseInt(var[2]));
+            }
+            if(var[0].equals("SIM")) {
+                if(var[1].equals("OUTLINE"))
+                    SettingsManager.getInstance().setGameDrawOutline(Boolean.parseBoolean(var[2]));
             }
         }
     }
@@ -85,7 +89,9 @@ public class SettingsManager {
         sb.append("COLOR:TAIL:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()))
                 .append("\n").append("COLOR:HEAD:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleHeadColor()))
                 .append("\n").append("COLOR:CABLE:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()))
-                .append("\nSIM:TIME").append(SettingsManager.getInstance().getGameGenTime());
+                .append("\n").append("COLOR:BACKGROUND:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()))
+                .append("\nSIM:TIME:").append(SettingsManager.getInstance().getGameGenTime())
+                .append("\nSIM:OUTLINE:").append(SettingsManager.getInstance().getGameDrawOutline());
         bw.write(sb.toString());
     }
 
@@ -183,7 +189,9 @@ public class SettingsManager {
         return gameDrawOutline;
     }
 
-    public void setGameDrawOutline(boolean gameDrawOutline) {
+    public void setGameDrawOutline(boolean gameDrawOutline)
+    {
         this.gameDrawOutline = gameDrawOutline;
+        fireChangedEvent();
     }
 }

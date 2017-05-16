@@ -18,6 +18,7 @@ public class EditorRenderer extends BoardRenderer {
     {
         mouseCellX = x;
         mouseCellY = y;
+        repaint();
     }
 
     @Override

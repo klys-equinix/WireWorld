@@ -1,6 +1,8 @@
 package Core.Utils;
 
 import Core.Settings.SettingsManager;
+import WireComponents.Board;
+import WireComponents.FileException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +65,25 @@ public class Utils {
         catch(IOException e)
         {
             JOptionPane.showMessageDialog(null,"Wystąpił problem w czasie zapisu konfiguracji!","WireWorld - zapis konfiguracji",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public static void writeGenToFile(String fileName, Board currBoard) throws FileException {//Writing the current generetion to a file which can be loaded later
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+            bw.write(currBoard.rows + " " + currBoard.columns + "\n");
+            for (int i = 0; i < currBoard.rows; i++) {
+                for (int j = 0; j < currBoard.columns; j++) {
+                    if (currBoard.getCellState(i, j) == 3) {
+                        bw.write(i + "." + j + "\n");
+                    } else if (currBoard.getCellState(i, j) == 1 || currBoard.getCellState(i, j) == 2) {
+                        bw.write(i + "." + j + ":" + currBoard.getCellState(i, j) + "\n");
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException ferr) {
+            throw new FileException(ferr.getMessage());
+        } catch (IOException err) {
+            throw new FileException(err.getMessage());
         }
     }
 }

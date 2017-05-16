@@ -57,12 +57,13 @@ public class EditorHandler implements WindowHandler {
                 mouseCellX = (int) Math.floor(e.getX()/zoomSlider.getValue());
                 mouseCellY = (int) Math.floor(e.getY()/zoomSlider.getValue());
                 editorRenderer.setMouseCell(mouseCellX, mouseCellY);
-                editorRenderer.repaint();
             }
         });
         editorRenderer.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                if(mouseCellX > BoardController.getInstance().getCurrBoard().rows || mouseCellY > BoardController.getInstance().getCurrBoard().columns)
+                    return;
                 int position[] = {mouseCellY, mouseCellX};
                 if(cableButton.isSelected())
                     BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 3);
@@ -100,8 +101,8 @@ public class EditorHandler implements WindowHandler {
                     return;
                 }
                 JOptionPane.showMessageDialog(null,"Matryca została zapisana pomyślnie!","WireWorld - zapis matrycy", JOptionPane.INFORMATION_MESSAGE);
+                makeEditorAccessible();
             }
-            makeEditorAccessible();
         });
         loadButton.addActionListener(e -> {
             int returnVal = fc.showOpenDialog(null);
@@ -114,8 +115,8 @@ public class EditorHandler implements WindowHandler {
                     return;
                 }
                 JOptionPane.showMessageDialog(null,"Matryca została wczytana pomyślnie!","WireWorld - odczyt matrycy", JOptionPane.INFORMATION_MESSAGE);
+                makeEditorAccessible();
             }
-            makeEditorAccessible();
         });
         nowyButton.addActionListener(e -> {
             String str = (String) JOptionPane.showInputDialog(
@@ -123,6 +124,8 @@ public class EditorHandler implements WindowHandler {
                 "Wielkość matrycy w formacie: [KOLUMNY]x[WIERSZE]",
                 "WireWorld - nowa matryca",
                 JOptionPane.PLAIN_MESSAGE);
+            if(str == null)
+                return;
             String val[] = str.split("x");
             if(val.length != 2) {
                 JOptionPane.showMessageDialog(null, "Ups.. Format wprowadzonych danych niezgdony z oczekiwanym!", "WireWorld - stworzenie matrycy", JOptionPane.ERROR_MESSAGE);
@@ -171,6 +174,7 @@ public class EditorHandler implements WindowHandler {
         editorRenderer.setBoard(BoardController.getInstance().getCurrBoard());
         gamePanel.setVisible(true);
         controlPanel.setVisible(true);
+        saveButton.setVisible(true);
         edFrame.setSize(720, 480);
     }
 }
