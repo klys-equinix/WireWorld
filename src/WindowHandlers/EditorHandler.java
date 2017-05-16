@@ -64,21 +64,24 @@ public class EditorHandler implements WindowHandler {
             public void mousePressed(MouseEvent e) {
                 if(mouseCellX > BoardController.getInstance().getCurrBoard().rows || mouseCellY > BoardController.getInstance().getCurrBoard().columns)
                     return;
-                int position[] = {mouseCellY, mouseCellX};
-                if(cableButton.isSelected())
-                    BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 3);
-                else if(elecHeadButton.isSelected())
-                    BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 1);
-                else if(elecTailButton.isSelected())
-                    BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 2);
-                else if(diodaRadioButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("Diode", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
-                else if(bramkaORRadioButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("ORgate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
-                else if(exORButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("ExORgate", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
-                else if(pulsarButton.isSelected())
-                    BoardController.getInstance().placeOnBoard("ClockGen", position, (int) rotationSpinner.getValue()/90, połączCheckBox.isSelected());
+                if(SwingUtilities.isLeftMouseButton(e)) {
+                    int position[] = {mouseCellY, mouseCellX};
+                    if (cableButton.isSelected())
+                        BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 3);
+                    else if (elecHeadButton.isSelected())
+                        BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 1);
+                    else if (elecTailButton.isSelected())
+                        BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 2);
+                    else if (diodaRadioButton.isSelected())
+                        BoardController.getInstance().placeOnBoard("Diode", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                    else if (bramkaORRadioButton.isSelected())
+                        BoardController.getInstance().placeOnBoard("ORgate", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                    else if (exORButton.isSelected())
+                        BoardController.getInstance().placeOnBoard("ExORgate", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                    else if (pulsarButton.isSelected())
+                        BoardController.getInstance().placeOnBoard("ClockGen", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                } else
+                    BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 0);
                 editorRenderer.setBoard(BoardController.getInstance().getCurrBoard());
             }
         });

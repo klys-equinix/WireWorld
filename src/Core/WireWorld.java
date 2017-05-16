@@ -52,9 +52,6 @@ public class WireWorld {
         gameHandler.createWindow();
         gameHandler.showWindow();
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new SimulatorTimer(gameHandler), SettingsManager.getInstance().getGameGenTime(), SettingsManager.getInstance().getGameGenTime());
-
         controlHandler.destroyWindow();
     }
 

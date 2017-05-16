@@ -5,8 +5,13 @@ import Core.WindowHandler;
 import WireComponents.Board;
 import WindowHandlers.BoardRenderer.BoardRenderer;
 import WireSimulator.BoardController;
+import WireSimulator.SimulatorTimer;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
 
 /**
  * Created by Szymon on 23.04.2017.
@@ -22,8 +27,15 @@ public class GameHandler implements WindowHandler {
     private JSlider zoomSlider;
     private BoardRenderer boardRenderer;
     private JScrollPane scrollPane;
+    private JButton pauseButton;
+    private JButton infSaveButton;
+    private JButton fixedSaveButton;
 
     private JFrame gameFrame;
+
+    private java.util.Timer timer = new java.util.Timer();
+
+    private boolean pauseButtonState = true;
 
     public GameHandler() {
         SettingsManager setman = SettingsManager.getInstance();
@@ -55,15 +67,30 @@ public class GameHandler implements WindowHandler {
             manualButton.setEnabled(false);
             genSlider.setEnabled(true);
             SettingsManager.getInstance().setAppFixedMode(SettingsManager.APP_FIXED_MANUAL);
+            fixedSaveButton.setEnabled(true);
         });
         autoButton.addActionListener(e -> {
             manualButton.setEnabled(true);
             autoButton.setEnabled(false);
             genSlider.setEnabled(false);
             SettingsManager.getInstance().setAppFixedMode(SettingsManager.APP_FIXED_AUTO);
+            fixedSaveButton.setEnabled(false);
         });
         scrollPane.setBackground(SettingsManager.getInstance().getGameBackgroundColor());
         boardRenderer.setBackground(SettingsManager.getInstance().getGameBackgroundColor());
+        pauseButton.addActionListener(e -> {
+            if(pauseButtonState) {
+                stopSimTimer();
+                pauseButton.setText("Start");
+                infSaveButton.setEnabled(true);
+                pauseButtonState = false;
+            } else {
+                startSimTimer();
+                pauseButton.setText("Pauza");
+                infSaveButton.setEnabled(false);
+                pauseButtonState = true;
+            }
+        });
     }
 
     @Override
@@ -86,11 +113,13 @@ public class GameHandler implements WindowHandler {
     @Override
     public void showWindow() {
         gameFrame.setVisible(true);
+        startSimTimer();
     }
 
     @Override
     public void hideWindow() {
         gameFrame.setVisible(false);
+        stopSimTimer();
     }
 
     @Override
@@ -112,5 +141,17 @@ public class GameHandler implements WindowHandler {
     public void setGenField(int value)
     {
         genField.setText(Integer.toString(value));
+    }
+
+    private void startSimTimer()
+    {
+        timer = new java.util.Timer();
+        timer.scheduleAtFixedRate(new SimulatorTimer(this), SettingsManager.getInstance().getGameGenTime(), SettingsManager.getInstance().getGameGenTime());
+    }
+
+    private void stopSimTimer()
+    {
+        timer.cancel();
+        timer.purge();
     }
 }
