@@ -3,10 +3,8 @@ package WindowHandlers;
 import Core.*;
 import Core.Settings.SettingsManager;
 import Core.Utils.Utils;
-import com.sun.scenario.Settings;
 
 import javax.swing.*;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +12,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Created by Szymon on 23.04.2017.
@@ -34,15 +31,15 @@ public class ControlHandler implements WindowHandler {
     private JButton tailColorButton;
     private JTextField cableColorField;
     private JButton cableColorButton;
-    private JButton wczytajKonfiguracjęButton;
-    private JButton zapiszKonfiguracjęButton;
+    private JButton loadConfigurationButton;
+    private JButton saveConfigurationButton;
     private JButton runEditorButton;
     private JFileChooser fc = new JFileChooser();
     private JPanel contentPanel;
     private JTextField backgroundColorField;
     private JButton backgroundColorButton;
     private JFormattedTextField genTimeField;
-    private JCheckBox rysujKrawędzieKomórekCheckBox;
+    private JCheckBox drawOutlinesCheckBox;
 
     private JFrame controlFrame;
 
@@ -54,7 +51,7 @@ public class ControlHandler implements WindowHandler {
         cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
         backgroundColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()));
         genTimeField.setText(Integer.toString(SettingsManager.getInstance().getGameGenTime()));
-        rysujKrawędzieKomórekCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
+        drawOutlinesCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
 
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 50, 1);
         spinnerGenNum.setModel(model);
@@ -118,7 +115,7 @@ public class ControlHandler implements WindowHandler {
                 SettingsManager.getInstance().setGameCableColor(newColor);
             }
         });
-        zapiszKonfiguracjęButton.addActionListener(e -> {
+        saveConfigurationButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
@@ -132,9 +129,9 @@ public class ControlHandler implements WindowHandler {
             cableColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameCableColor()));
             backgroundColorField.setText(Utils.getColorAsVector(SettingsManager.getInstance().getGameBackgroundColor()));
             genTimeField.setText(Integer.toString(SettingsManager.getInstance().getGameGenTime()));
-            rysujKrawędzieKomórekCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
+            drawOutlinesCheckBox.setSelected(SettingsManager.getInstance().getGameDrawOutline());
         });
-        wczytajKonfiguracjęButton.addActionListener(e -> {
+        loadConfigurationButton.addActionListener(e -> {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 Utils.loadSettingsFromFile(fc.getSelectedFile());
@@ -160,7 +157,7 @@ public class ControlHandler implements WindowHandler {
                     SettingsManager.getInstance().setGameGenTime(Integer.parseInt(field.getText()));
             }
         });
-        rysujKrawędzieKomórekCheckBox.addActionListener(e -> {
+        drawOutlinesCheckBox.addActionListener(e -> {
             JCheckBox comp = (JCheckBox)e.getSource();
             SettingsManager.getInstance().setGameDrawOutline(comp.isSelected());
         });

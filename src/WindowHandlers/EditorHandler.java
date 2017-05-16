@@ -1,19 +1,13 @@
 package WindowHandlers;
 
-import Core.Utils.Utils;
 import Core.WindowHandler;
-import WindowHandlers.BoardRenderer.BoardRenderer;
 import WindowHandlers.BoardRenderer.EditorRenderer;
 import WireComponents.FileException;
 import WireSimulator.BoardController;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.List;
 
 /**
  * Created by Szymon on 11.05.2017.
@@ -28,15 +22,15 @@ public class EditorHandler implements WindowHandler {
     private JScrollPane scrollPane;
     private JSlider zoomSlider;
     private JRadioButton diodaRadioButton;
-    private JRadioButton bramkaORRadioButton;
+    private JRadioButton gateORRadioButton;
     private JRadioButton cableButton;
     private JRadioButton elecHeadButton;
     private JRadioButton elecTailButton;
-    private JButton nowyButton;
+    private JButton newBoardButton;
     private JPanel gamePanel;
     private JPanel controlPanel;
     private JSpinner rotationSpinner;
-    private JCheckBox połączCheckBox;
+    private JCheckBox joinComponentsCheckBox;
     private JRadioButton pulsarButton;
     private JRadioButton exORButton;
 
@@ -73,13 +67,13 @@ public class EditorHandler implements WindowHandler {
                     else if (elecTailButton.isSelected())
                         BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 2);
                     else if (diodaRadioButton.isSelected())
-                        BoardController.getInstance().placeOnBoard("Diode", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
-                    else if (bramkaORRadioButton.isSelected())
-                        BoardController.getInstance().placeOnBoard("ORgate", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                        BoardController.getInstance().placeOnBoard("Diode", position, (int) rotationSpinner.getValue() / 90, joinComponentsCheckBox.isSelected());
+                    else if (gateORRadioButton.isSelected())
+                        BoardController.getInstance().placeOnBoard("ORgate", position, (int) rotationSpinner.getValue() / 90, joinComponentsCheckBox.isSelected());
                     else if (exORButton.isSelected())
-                        BoardController.getInstance().placeOnBoard("ExORgate", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                        BoardController.getInstance().placeOnBoard("ExORgate", position, (int) rotationSpinner.getValue() / 90, joinComponentsCheckBox.isSelected());
                     else if (pulsarButton.isSelected())
-                        BoardController.getInstance().placeOnBoard("ClockGen", position, (int) rotationSpinner.getValue() / 90, połączCheckBox.isSelected());
+                        BoardController.getInstance().placeOnBoard("ClockGen", position, (int) rotationSpinner.getValue() / 90, joinComponentsCheckBox.isSelected());
                 } else
                     BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 0);
                 editorRenderer.setBoard(BoardController.getInstance().getCurrBoard());
@@ -87,7 +81,7 @@ public class EditorHandler implements WindowHandler {
         });
         ButtonGroup group = new ButtonGroup();
         group.add(diodaRadioButton);
-        group.add(bramkaORRadioButton);
+        group.add(gateORRadioButton);
         group.add(cableButton);
         group.add(elecHeadButton);
         group.add(elecTailButton);
@@ -121,7 +115,7 @@ public class EditorHandler implements WindowHandler {
                 makeEditorAccessible();
             }
         });
-        nowyButton.addActionListener(e -> {
+        newBoardButton.addActionListener(e -> {
             String str = (String) JOptionPane.showInputDialog(
                 null,
                 "Wielkość matrycy w formacie: [KOLUMNY]x[WIERSZE]",

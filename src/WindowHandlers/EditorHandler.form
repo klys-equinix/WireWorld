@@ -35,7 +35,7 @@
                   <text value="Dioda"/>
                 </properties>
               </component>
-              <component id="8e1e5" class="javax.swing.JRadioButton" binding="bramkaORRadioButton" default-binding="true">
+              <component id="8e1e5" class="javax.swing.JRadioButton" binding="gateORRadioButton" default-binding="true">
                 <constraints>
                   <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -100,7 +100,7 @@
                   <text value="Obrót:"/>
                 </properties>
               </component>
-              <component id="b147b" class="javax.swing.JCheckBox" binding="połączCheckBox" default-binding="true">
+              <component id="b147b" class="javax.swing.JCheckBox" binding="joinComponentsCheckBox" default-binding="true">
                 <constraints>
                   <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -175,7 +175,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="ab567" class="javax.swing.JButton" binding="nowyButton" default-binding="true">
+              <component id="ab567" class="javax.swing.JButton" binding="newBoardButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>

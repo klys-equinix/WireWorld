@@ -275,7 +275,7 @@
                   <text value="Czas generacji:"/>
                 </properties>
               </component>
-              <component id="98ee1" class="javax.swing.JCheckBox" binding="rysujKrawędzieKomórekCheckBox" default-binding="true">
+              <component id="98ee1" class="javax.swing.JCheckBox" binding="drawOutlinesCheckBox" default-binding="true">
                 <constraints>
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -302,7 +302,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="6d752" class="javax.swing.JButton" binding="wczytajKonfiguracjęButton" default-binding="true">
+              <component id="6d752" class="javax.swing.JButton" binding="loadConfigurationButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -310,7 +310,7 @@
                   <text value="Wczytaj konfigurację"/>
                 </properties>
               </component>
-              <component id="9e3a8" class="javax.swing.JButton" binding="zapiszKonfiguracjęButton" default-binding="true">
+              <component id="9e3a8" class="javax.swing.JButton" binding="saveConfigurationButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
