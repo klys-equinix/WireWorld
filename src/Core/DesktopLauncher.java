@@ -6,7 +6,9 @@ import WireComponents.ComponentBoardFactory;
 import javax.swing.*;
 
 /**
- * Created by Szymon on 12.05.2017.
+ * <h1>DesktopLauncher</h1>
+ * Class used to launch app.
+ * @author Szymon "Aitwar" Chmal
  */
 public class DesktopLauncher {
     public static void main(String args[]){

@@ -3,7 +3,10 @@ package Core;
 import javax.swing.*;
 
 /**
- * Created by Szymon on 11.05.2017.
+ * <h1>WindowHandler/h1>
+ * Interface used to create classes maintaining logic
+ * of the parts of app.
+ * @author Szymon "Aitwar" Chmal
  */
 public interface WindowHandler {
     void createWindow();

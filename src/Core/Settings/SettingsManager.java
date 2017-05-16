@@ -2,19 +2,24 @@ package Core.Settings;
 
 import Core.Utils.Utils;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
 
 /**
- * Created by Szymon on 23.04.2017.
+ * <h1>SettingsManager/h1>
+ * Class containing setting's variables, maintaining access to them by sharing access methods.
+ * @author Szymon "Aitwar" Chmal
  */
 public class SettingsManager {
     private static SettingsManager setman = new SettingsManager();
 
     private java.util.List<SettingsListener> listeners = new ArrayList<SettingsListener>();
 
+    /**
+     * Add listeners to "OnSettingsChanged" event
+     * @return Nothing.
+     */
     public void addListener(SettingsListener toAdd) {
         listeners.add(toAdd);
     }
@@ -52,10 +57,21 @@ public class SettingsManager {
         gameDrawOutline = true;
     }
 
+    /**
+     * Method used to obtain instance of Settings Manager.
+     * @return Instance of Settings Manager
+     */
     public static SettingsManager getInstance() {
         return setman;
     }
 
+    /**
+     * Method used to load settings from compatible input.
+     * @param br BufferedReader of input
+     * @return Nothing.
+     * @exception IOException on input error
+     * @see IOException
+     */
     public void loadSettings(BufferedReader br) throws IOException
     {
         String str;
@@ -84,6 +100,13 @@ public class SettingsManager {
         }
     }
 
+    /**
+     * Method used to save settings to compatible output.
+     * @param bw BufferedWriter of output
+     * @return Nothing.
+     * @exception IOException on output error
+     * @see IOException
+     */
     public void saveSettings(BufferedWriter bw) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("COLOR:TAIL:").append(Utils.getColorAsVector(SettingsManager.getInstance().getGameEleTailColor()))
@@ -95,6 +118,10 @@ public class SettingsManager {
         bw.write(sb.toString());
     }
 
+    /**
+     * Method used to inform listeners about settings change.
+     * @return Nothing.
+     */
     private void fireChangedEvent()
     {
         for (SettingsListener hl : listeners)
