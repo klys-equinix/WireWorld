@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class BoardController implements IBoardController {
     private static final boolean DEV_MODE = true;
     private static BoardController ourInstance = new BoardController();
-    private ArrayList<Board> memory = new ArrayList<>();
-    private Board currBoard;
+    private ArrayList<Board> memory = new ArrayList<>();//Holds all generations apart from the current one
+    private Board currBoard;//Holds current generation
     private boolean firstGen = true;
 
     private BoardController() {
@@ -44,7 +44,7 @@ public class BoardController implements IBoardController {
     }
 
     @Override
-    public void init(String fileName) throws FileException {//Initialize a board with a structure specified in a file
+    public void init(String fileName) throws FileException {//Initialize a board from a file with a Board object
         FileInputStream fis = null;
         ObjectInputStream in = null;
         Board readBoard=null;
@@ -61,7 +61,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    public void readFromUserFormat(String fileName) throws FileException {//Read from a file of understandable format
+    public void readFromUserFormat(String fileName) throws FileException {//Read board from a file of understandable format
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -152,7 +152,7 @@ public class BoardController implements IBoardController {
         this.memory.add(currBoard);
 
     }
-    public void drawBoard() {
+    public void drawBoard() {//Method drawing a board in console, for debbuging/DEV_MODE
         for (int i = 0; i < currBoard.rows; i++) {
             System.out.print("{");
             for (int j = 0; j < currBoard.columns; j++) {
@@ -183,7 +183,7 @@ public class BoardController implements IBoardController {
         }
     }
     @Override
-    public void writeGenToFile(String fileName) throws FileException{
+    public void writeGenToFile(String fileName) throws FileException{//Writing the current generation to a file as a Board object
 
             new Thread(new Runnable() {
                 @Override
@@ -201,34 +201,20 @@ public class BoardController implements IBoardController {
             }).start();
 
     }
-    public Board readObjFromFile(String fileName){
-        FileInputStream fis = null;
-        ObjectInputStream in = null;
-        Board readBoard=null;
-        try {
-            fis = new FileInputStream(fileName);
-            in = new ObjectInputStream(fis);
-            readBoard = (Board) in.readObject();
-            in.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return readBoard;
-    }
     @Override
     public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {//Producing a component element, and than placing it on board
         ComponentFactory compFact = new ComponentFactory();
         Component newComp = compFact.getComponent(compType, loc, rotation, isConnected);
         if (newComp != null) {
             try {
-                imprintComponent(newComp);//actually handling the printing of an component
+                imprintComponent(newComp);//Actually handling the printing of an component
             } catch (IndexOutOfBoundsException out) {
                 throw new IndexOutOfBoundsException(out.getMessage());
             }
         }
     }
 
-    private int evalCell(int row, int col) {
+    private int evalCell(int row, int col) {//Evaluating the value a cell will have in the coming generation
         int state;
         int count = 0;
         state = currBoard.getCellState(row, col);
@@ -281,7 +267,7 @@ public class BoardController implements IBoardController {
             }
         }
         currBoard.setCellStates(tempState);
-        if (newComp.wire) {//Wireing the component if requested
+        if (newComp.wire) {//Wiring the component if requested
             switch (newComp.rotation) {
                 case 0: {
                     for (int[] in : newComp.input) {
@@ -365,7 +351,7 @@ public class BoardController implements IBoardController {
         }
     }
 
-    private boolean isWire(int i, int j, boolean vertical) {//helper function for imprintComponent, to check if the next cell is wire or empty
+    private boolean isWire(int i, int j, boolean vertical) {//Helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
                 if (k < 0 || k >= currBoard.columns) {

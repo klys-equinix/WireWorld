@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Konrad on 20.04.2017.
  */
-public class Board implements Serializable {
+public class Board implements Serializable {//Model for our application
     private int[][] cellStates;
     public int rows;
     public int columns;

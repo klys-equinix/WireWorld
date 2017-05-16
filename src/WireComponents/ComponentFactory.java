@@ -3,7 +3,7 @@ package WireComponents;
 /**
  * Created by Konrad on 24.04.2017.
  */
-public class ComponentFactory {
+public class ComponentFactory {//Abstract Factory of Component class elements
     public Component getComponent(String compType,int[] loc ,int rotation,boolean connected){
             switch (compType){
                 case "Diode":
