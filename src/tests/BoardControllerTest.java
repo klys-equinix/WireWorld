@@ -1,6 +1,7 @@
 package tests;
 
 import WireComponents.Board;
+import WireComponents.FileException;
 import WireSimulator.BoardController;
 import org.junit.*;
 
@@ -46,12 +47,21 @@ public class BoardControllerTest {
         System.out.println("setting it up");
         BoardController.getInstance().readFromUserFormat("./testFile");
 
+
     }
+
+    /**
+     * Checking if initializing from a readable format file works
+     */
     @Test
     public void checkInitBoard(){
         System.out.println("Running init test");
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(), expInitBoard);
     }
+
+    /**
+     * Checking if simulation works
+     */
     @Test
     public void checkFinalBoard(){
         System.out.println("Running final test");
@@ -59,10 +69,14 @@ public class BoardControllerTest {
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(), expFinalBoard);
 
     }
+
+    /**
+     * Checking if imprinting works
+     */
     @Test
     public void checkImprintBoard(){
         System.out.println("Running imprint test");
-        BoardController.reset();
+        BoardController.getInstance().reset();
         BoardController.getInstance().init(20,20);
         int[] loc = {5, 1};//location of topmost indexes of an element-where should it be placed on the board
         BoardController.getInstance().placeOnBoard("ClockGen", loc, 0, false);//imprinting the element on the empty board
@@ -71,6 +85,21 @@ public class BoardControllerTest {
         BoardController.getInstance().drawBoard();
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(),expImprintBoard);
     }
+    /**
+     * Checking if reading from byte stream format file works
+     */
+    @Test
+    public void checkSerializeSave(){
+        System.out.println("Running load test");
+        BoardController.getInstance().reset();
+        try {
+            BoardController.getInstance().init("newFile");
+        }catch (FileException fx){
+
+        }
+        assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(),expImprintBoard);
+    }
+
 
 
     @org.junit.After

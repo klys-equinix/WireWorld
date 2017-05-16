@@ -1,7 +1,7 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * Abstract Factory for Component class elements
  */
 public class ComponentFactory {//Abstract Factory of Component class elements
     public Component getComponent(String compType,int[] loc ,int rotation,boolean connected){

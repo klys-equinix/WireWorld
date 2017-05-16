@@ -3,7 +3,7 @@ package WireComponents;
 import java.io.Serializable;
 
 /**
- * Created by Konrad on 20.04.2017.
+ * Model for our application, Board objects hold states of WireWorld simulation
  */
 public class Board implements Serializable {//Model for our application
     private int[][] cellStates;

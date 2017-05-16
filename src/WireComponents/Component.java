@@ -1,7 +1,7 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * Abstract class of components, elements simulating parts of circuits
  */
 public abstract class Component {
         public boolean wire ;

@@ -9,7 +9,13 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Created by Konrad on 13.05.2017.
+ * The BoardController class is a controller for
+ * Board model, and it holds all methods necessary for manipulating that model
+ * the WireWorld needs.
+ *
+ * @author  Konrad Lys
+ * @version 1.0
+ * @since   2017-05-13
  */
 public class BoardController implements IBoardController {
     private static final boolean DEV_MODE = true;
@@ -61,6 +67,11 @@ public class BoardController implements IBoardController {
         }
     }
 
+    /**
+     * Function allows creating a Board from a file with a Board saved in a readable format
+     * @param fileName the file we want to save to
+     * @throws FileException when reading the file failed
+     */
     public void readFromUserFormat(String fileName) throws FileException {//Read board from a file of understandable format
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -152,6 +163,10 @@ public class BoardController implements IBoardController {
         this.memory.add(currBoard);
 
     }
+
+    /**
+     * Draws the currBoard in Console, for debugging mostly
+     */
     public void drawBoard() {//Method drawing a board in console, for debbuging/DEV_MODE
         for (int i = 0; i < currBoard.rows; i++) {
             System.out.print("{");
@@ -163,6 +178,12 @@ public class BoardController implements IBoardController {
         System.out.print("\n");
 
     }
+
+    /**
+     * Allows saving currBoard to a file in a readable format, which can be modified by hand.
+     * @param fileName name of a file we want to save to
+     * @throws FileException when writing to file failed
+     */
     public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write(currBoard.rows + " " + currBoard.columns + "\n");
@@ -214,6 +235,12 @@ public class BoardController implements IBoardController {
         }
     }
 
+    /**
+     * Calculates the cell value in the next generation
+     * @param row row index of the cell
+     * @param col column index of the cell
+     * @return next value of the cell
+     */
     private int evalCell(int row, int col) {//Evaluating the value a cell will have in the coming generation
         int state;
         int count = 0;
@@ -252,6 +279,10 @@ public class BoardController implements IBoardController {
         }
     }
 
+    /**
+     * Writes a Component object on currBoard, optionally connecting it
+     * @param newComp the component we want to imprint
+     */
     private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
         int[][] tempState = new int[currBoard.rows][currBoard.columns];
         for (int i = 0; i < currBoard.getCellStates().length; i++) {
@@ -351,6 +382,13 @@ public class BoardController implements IBoardController {
         }
     }
 
+    /**
+     * Helper function for imprintComponent, to check if the next cell is wire or empty
+     * @param i row index of the cell
+     * @param j column index of the cell
+     * @param vertical is the component placed vertically
+     * @return true if it is wire, false when not
+     */
     private boolean isWire(int i, int j, boolean vertical) {//Helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
