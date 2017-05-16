@@ -1,5 +1,6 @@
 package tests;
 
+import WireComponents.Board;
 import WireSimulator.BoardController;
 import org.junit.*;
 
@@ -43,7 +44,7 @@ public class BoardControllerTest {
     @org.junit.Before
     public void setUp() throws Exception {
         System.out.println("setting it up");
-        BoardController.getInstance().init("./testFile");
+        BoardController.getInstance().readFromUserFormat("./testFile");
 
     }
     @Test
@@ -70,6 +71,7 @@ public class BoardControllerTest {
         BoardController.getInstance().drawBoard();
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(),expImprintBoard);
     }
+
 
     @org.junit.After
     public void tearDown() throws Exception {

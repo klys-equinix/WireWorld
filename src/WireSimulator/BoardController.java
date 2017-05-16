@@ -45,6 +45,23 @@ public class BoardController implements IBoardController {
 
     @Override
     public void init(String fileName) throws FileException {//Initialize a board with a structure specified in a file
+        FileInputStream fis = null;
+        ObjectInputStream in = null;
+        Board readBoard=null;
+        try {
+            fis = new FileInputStream(fileName);
+            in = new ObjectInputStream(fis);
+            readBoard = (Board) in.readObject();
+            in.close();
+        } catch (Exception ex) {
+            throw new FileException("Cannot read file" + ex.getStackTrace());
+        }
+        if(readBoard!=null){
+            this.currBoard=readBoard;
+        }
+    }
+
+    public void readFromUserFormat(String fileName) throws FileException {//Read from a file of understandable format
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -146,8 +163,7 @@ public class BoardController implements IBoardController {
         System.out.print("\n");
 
     }
-    @Override
-    public void writeGenToFile(String fileName) throws FileException {//Writing the current generetion to a file which can be loaded later
+    public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
             bw.write(currBoard.rows + " " + currBoard.columns + "\n");
             for (int i = 0; i < currBoard.rows; i++) {
@@ -166,7 +182,39 @@ public class BoardController implements IBoardController {
             throw new FileException(err.getMessage());
         }
     }
+    @Override
+    public void writeGenToFile(String fileName) throws FileException{
 
+            new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    FileOutputStream fos = null;
+                    ObjectOutputStream out = null;
+                    try {
+                        fos = new FileOutputStream(fileName);
+                        out = new ObjectOutputStream(fos);
+                        out.writeObject(currBoard);
+                        out.close();
+                    } catch (Exception ex) {
+                    }
+                }
+            }).start();
+
+    }
+    public Board readObjFromFile(String fileName){
+        FileInputStream fis = null;
+        ObjectInputStream in = null;
+        Board readBoard=null;
+        try {
+            fis = new FileInputStream(fileName);
+            in = new ObjectInputStream(fis);
+            readBoard = (Board) in.readObject();
+            in.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return readBoard;
+    }
     @Override
     public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {//Producing a component element, and than placing it on board
         ComponentFactory compFact = new ComponentFactory();

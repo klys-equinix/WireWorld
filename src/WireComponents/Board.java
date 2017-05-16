@@ -1,9 +1,11 @@
 package WireComponents;
 
+import java.io.Serializable;
+
 /**
  * Created by Konrad on 20.04.2017.
  */
-public class Board {
+public class Board implements Serializable {
     private int[][] cellStates;
     public int rows;
     public int columns;
