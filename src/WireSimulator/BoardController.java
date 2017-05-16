@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by Konrad on 13.05.2017.
  */
 public class BoardController implements IBoardController {
-    public static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = true;
     private static BoardController ourInstance = new BoardController();
     private ArrayList<Board> memory = new ArrayList<>();
     private Board currBoard;
@@ -234,75 +234,84 @@ public class BoardController implements IBoardController {
         }
         currBoard.setCellStates(tempState);
         if (newComp.wire) {//Wireing the component if requested
-            if (newComp.rotation == 0) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
-                        if (isWire(in[0] + newComp.loc[0], i, false)) {
-                            break;
+            switch (newComp.rotation) {
+                case 0: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
+                            if (isWire(in[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                     }
-                }
 
-                for (int[] out : newComp.output) {
-                    for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.columns; i++) {
-                        if (isWire(out[0] + newComp.loc[0], i, false)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.columns; i++) {
+                            if (isWire(out[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 1) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
-                        if (isWire(i, in[1] + newComp.loc[1], true)) {
-                            break;
+                case 1: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[0] + in[0] - 1; i >= 0; i--) {
+                            if (isWire(i, in[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, in[i] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, in[i] + newComp.loc[1], 3);
                     }
-                }
-                for (int[] out : newComp.output) {
-                    for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.rows; i++) {
-                        if (isWire(i, out[1] + newComp.loc[1], true)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.rows; i++) {
+                            if (isWire(i, out[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 2) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.columns; i++) {
-                        if (isWire(in[0] + newComp.loc[0], i, false)) {
-                            break;
+                case 2: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.columns; i++) {
+                            if (isWire(in[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(in[0] + newComp.loc[0], i, 3);
                     }
-                }
 
-                for (int[] out : newComp.output) {
-                    for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
-                        if (isWire(out[0] + newComp.loc[0], i, false)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[1] + newComp.loc[1] - 1; i >= 0; i--) {
+                            if (isWire(out[0] + newComp.loc[0], i, false)) {
+                                break;
+                            }
+                            currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                         }
-                        currBoard.setCellState(out[0] + newComp.loc[0], i, 3);
                     }
+                    break;
                 }
-            } else if (newComp.rotation == 3) {
-                for (int[] in : newComp.input) {
-                    for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.rows; i++) {
-                        if (isWire(i, in[1] + newComp.loc[1], true)) {
-                            break;
+                case 3: {
+                    for (int[] in : newComp.input) {
+                        for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.rows; i++) {
+                            if (isWire(i, in[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, in[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, in[1] + newComp.loc[1], 3);
                     }
-                }
-                for (int[] out : newComp.output) {
-                    for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
-                        if (isWire(i, out[1] + newComp.loc[1], true)) {
-                            break;
+                    for (int[] out : newComp.output) {
+                        for (int i = out[0] + newComp.loc[0] - 1; i >= 0; i--) {
+                            if (isWire(i, out[1] + newComp.loc[1], true)) {
+                                break;
+                            }
+                            currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                         }
-                        currBoard.setCellState(i, out[1] + newComp.loc[1], 3);
                     }
+                    break;
                 }
             }
         }

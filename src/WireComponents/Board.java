@@ -20,7 +20,7 @@ public class Board {
         this.columns = columns;
     }
 
-    public Board(int[][] cellStates, int rows, int columns) {
+    Board(int[][] cellStates, int rows, int columns) {
         this.cellStates = cellStates;
         this.rows = rows;
         this.columns = columns;
