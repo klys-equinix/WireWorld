@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public class Board implements Serializable {//Model for our application
     private int[][] cellStates;
-    public int rows;
-    public int columns;
+    private int rows;
+    private int columns;
 
 
     public Board(int rows, int columns) {
@@ -31,7 +31,12 @@ public class Board implements Serializable {//Model for our application
     public void setCellState(int i, int j, int state) {
         this.cellStates[i][j] = state;
     }
-
+    public int getRows(){
+        return this.rows;
+    }
+    public int getColumns(){
+        return this.columns;
+    }
     public int getCellState(int i, int j) {
         return cellStates[i][j];
     }

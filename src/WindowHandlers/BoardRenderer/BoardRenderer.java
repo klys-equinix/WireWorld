@@ -21,8 +21,8 @@ public class BoardRenderer extends JPanel {
         if(board == null)
             return;
 
-        for (int i = 0; i < board.rows; i++) {
-            for (int j = 0; j < board.columns; j++) {
+        for (int i = 0; i < board.getRows(); i++) {
+            for (int j = 0; j < board.getColumns(); j++) {
                 if(SettingsManager.getInstance().getGameDrawOutline()) {
                     g1.setColor(Color.white);
                     g1.drawRect(j * zoom - 1, i * zoom - 1, zoom + 1, zoom + 1);
@@ -58,7 +58,7 @@ public class BoardRenderer extends JPanel {
         if(board == null)
             return new Dimension(0, 0);
 
-        return new Dimension(board.columns * zoom, board.rows * zoom);
+        return new Dimension(board.getColumns() * zoom, board.getRows() * zoom);
     }
 
     public void setBoard(Board board)

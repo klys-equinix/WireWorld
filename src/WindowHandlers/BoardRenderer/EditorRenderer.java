@@ -28,7 +28,7 @@ public class EditorRenderer extends BoardRenderer {
         g1.setColor(Color.blue);
         if(board == null)
             return;
-        if(mouseCellX != -1 && mouseCellY != -1 && mouseCellX < board.columns && mouseCellY < board.rows)
+        if(mouseCellX != -1 && mouseCellY != -1 && mouseCellX < board.getColumns() && mouseCellY < board.getRows())
             g1.fillRect(mouseCellX*zoom, mouseCellY*zoom, zoom, zoom);
     }
 }
