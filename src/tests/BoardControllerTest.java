@@ -45,7 +45,7 @@ public class BoardControllerTest {
     @org.junit.Before
     public void setUp() throws Exception {
         System.out.println("setting it up");
-        BoardController.getInstance().readFromUserFormat("./testFile");
+        BoardController.getInstance().readFromUserFormat("./testFile.ur");
 
 
     }

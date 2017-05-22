@@ -13,9 +13,9 @@ import java.util.ArrayList;
  * Board model, and it holds all methods necessary for manipulating that model
  * the WireWorld needs.
  *
- * @author  Konrad Lys
+ * @author Konrad Lys
  * @version 1.0
- * @since   2017-05-13
+ * @since 2017-05-13
  */
 public class BoardController implements IBoardController {
     private static final boolean DEV_MODE = true;
@@ -51,9 +51,14 @@ public class BoardController implements IBoardController {
 
     @Override
     public void init(String fileName) throws FileException {//Initialize a board from a file with a Board object
+        String[] fileFormat = fileName.split("\\.");
+        if(fileFormat.length>1&&fileFormat[1].equals("ur")){
+            readFromUserFormat(fileName);
+            return;
+        }
         FileInputStream fis = null;
         ObjectInputStream in = null;
-        Board readBoard=null;
+        Board readBoard = null;
         try {
             fis = new FileInputStream(fileName);
             in = new ObjectInputStream(fis);
@@ -62,13 +67,15 @@ public class BoardController implements IBoardController {
         } catch (Exception ex) {
             throw new FileException("Cannot read file" + ex.getStackTrace());
         }
-        if(readBoard!=null){
-            this.currBoard=readBoard;
+        if (readBoard != null) {
+            this.currBoard = readBoard;
         }
     }
 
     /**
-     * Function allows creating a Board from a file with a Board saved in a readable format
+     * Function allows creating a Board from a file with a Board saved in a readable format,
+     * when format is ".ur". The function init uses this function to load boards in format different from default object.
+     *
      * @param fileName the file we want to save to
      * @throws FileException when reading the file failed
      */
@@ -87,7 +94,7 @@ public class BoardController implements IBoardController {
                     lineContents = line.split("[.:]");
                     int state = Integer.parseInt(lineContents[2]);
                     if (state != 1 && state != 2) {
-                        throw new FileException("This value cannot be put on board" +":"+ state);
+                        throw new FileException("This value cannot be put on board" + ":" + state);
                     }
                     this.currBoard.setCellState(Integer.parseInt(lineContents[0]), Integer.parseInt(lineContents[1]), state);
                 } else {
@@ -142,7 +149,7 @@ public class BoardController implements IBoardController {
                     currBoard.setCellState(0, j, 1);
                 }
             }
-            if(DEV_MODE){
+            if (DEV_MODE) {
                 drawBoard();
             }
             this.memory.add(currBoard);
@@ -157,7 +164,7 @@ public class BoardController implements IBoardController {
             }
         }
         this.currBoard = nextGen;
-        if(DEV_MODE){
+        if (DEV_MODE) {
             drawBoard();
         }
         this.memory.add(currBoard);
@@ -171,7 +178,7 @@ public class BoardController implements IBoardController {
         for (int i = 0; i < currBoard.rows; i++) {
             System.out.print("{");
             for (int j = 0; j < currBoard.columns; j++) {
-                System.out.print(currBoard.getCellState(i,j) + ",");
+                System.out.print(currBoard.getCellState(i, j) + ",");
             }
             System.out.print("}" + "\n");
         }
@@ -181,11 +188,12 @@ public class BoardController implements IBoardController {
 
     /**
      * Allows saving currBoard to a file in a readable format, which can be modified by hand.
+     *
      * @param fileName name of a file we want to save to
      * @throws FileException when writing to file failed
      */
     public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".ur"))) {
             bw.write(currBoard.rows + " " + currBoard.columns + "\n");
             for (int i = 0; i < currBoard.rows; i++) {
                 for (int j = 0; j < currBoard.columns; j++) {
@@ -203,25 +211,27 @@ public class BoardController implements IBoardController {
             throw new FileException(err.getMessage());
         }
     }
-    @Override
-    public void writeGenToFile(String fileName) throws FileException{//Writing the current generation to a file as a Board object
 
-            new Thread(new Runnable() {
-                @Override
-                public void run(){
-                    FileOutputStream fos = null;
-                    ObjectOutputStream out = null;
-                    try {
-                        fos = new FileOutputStream(fileName);
-                        out = new ObjectOutputStream(fos);
-                        out.writeObject(currBoard);
-                        out.close();
-                    } catch (Exception ex) {
-                    }
+    @Override
+    public void writeGenToFile(String fileName) throws FileException {//Writing the current generation to a file as a Board object
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FileOutputStream fos = null;
+                ObjectOutputStream out = null;
+                try {
+                    fos = new FileOutputStream(fileName);
+                    out = new ObjectOutputStream(fos);
+                    out.writeObject(currBoard);
+                    out.close();
+                } catch (Exception ex) {
                 }
-            }).start();
+            }
+        }).start();
 
     }
+
     @Override
     public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {//Producing a component element, and than placing it on board
         ComponentFactory compFact = new ComponentFactory();
@@ -237,6 +247,7 @@ public class BoardController implements IBoardController {
 
     /**
      * Calculates the cell value in the next generation
+     *
      * @param row row index of the cell
      * @param col column index of the cell
      * @return next value of the cell
@@ -281,6 +292,7 @@ public class BoardController implements IBoardController {
 
     /**
      * Writes a Component object on currBoard, optionally connecting it
+     *
      * @param newComp the component we want to imprint
      */
     private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
@@ -326,7 +338,7 @@ public class BoardController implements IBoardController {
                             if (isWire(i, in[1] + newComp.loc[1], true)) {
                                 break;
                             }
-                            currBoard.setCellState(i, in[i] + newComp.loc[1], 3);
+                            currBoard.setCellState(i, in[1] + newComp.loc[1], 3);
                         }
                     }
                     for (int[] out : newComp.output) {
@@ -384,8 +396,9 @@ public class BoardController implements IBoardController {
 
     /**
      * Helper function for imprintComponent, to check if the next cell is wire or empty
-     * @param i row index of the cell
-     * @param j column index of the cell
+     *
+     * @param i        row index of the cell
+     * @param j        column index of the cell
      * @param vertical is the component placed vertically
      * @return true if it is wire, false when not
      */
