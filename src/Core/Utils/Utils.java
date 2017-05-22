@@ -134,7 +134,7 @@ public class Utils {
      * Todo
      */
     public static void writeGenToFile(String fileName, Board currBoard) throws FileException {
-        new Thread(() -> {
+
             FileOutputStream fos = null;
             ObjectOutputStream out = null;
             try {
@@ -143,8 +143,9 @@ public class Utils {
                 out.writeObject(currBoard);
                 out.close();
             } catch (Exception ex) {
+                throw new FileException("Cannot write to the file");
             }
-        }).start();
+
     }
 
     /**

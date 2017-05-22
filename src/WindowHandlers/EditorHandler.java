@@ -56,7 +56,7 @@ public class EditorHandler implements WindowHandler {
         editorRenderer.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(mouseCellX > BoardController.getInstance().getCurrBoard().rows || mouseCellY > BoardController.getInstance().getCurrBoard().columns)
+                if(mouseCellX > BoardController.getInstance().getCurrBoard().getRows() || mouseCellY > BoardController.getInstance().getCurrBoard().getColumns())
                     return;
                 if(SwingUtilities.isLeftMouseButton(e)) {
                     int position[] = {mouseCellY, mouseCellX};

@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @since 2017-05-13
  */
 public class BoardController implements IBoardController {
-    private static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = false;
     private static BoardController ourInstance = new BoardController();
     private ArrayList<Board> memory = new ArrayList<>();//Holds all generations apart from the current one
     private Board currBoard;//Holds current generation
@@ -139,12 +139,12 @@ public class BoardController implements IBoardController {
     public void nextGeneration() {//Call to make board go to the next state resulting from current state
         if (firstGen) {
             this.memory.add(currBoard);
-            for (int i = 0; i < currBoard.rows; i++) {
+            for (int i = 0; i < currBoard.getRows(); i++) {
                 if (currBoard.getCellState(i, 0) == 3) {
                     currBoard.setCellState(i, 0, 1);
                 }
             }
-            for (int j = 0; j < currBoard.columns; j++) {
+            for (int j = 0; j < currBoard.getColumns(); j++) {
                 if (currBoard.getCellState(0, j) == 3) {
                     currBoard.setCellState(0, j, 1);
                 }
@@ -156,9 +156,9 @@ public class BoardController implements IBoardController {
             firstGen = false;
             return;
         }
-        Board nextGen = new Board(currBoard.rows, currBoard.columns);
-        for (int i = 0; i < currBoard.rows; i++) {
-            for (int j = 0; j < currBoard.columns; j++) {
+        Board nextGen = new Board(currBoard.getRows(), currBoard.getColumns());
+        for (int i = 0; i < currBoard.getRows(); i++) {
+            for (int j = 0; j < currBoard.getColumns(); j++) {
                 int newState = evalCell(i, j);
                 nextGen.setCellState(i, j, newState);
             }
@@ -175,9 +175,9 @@ public class BoardController implements IBoardController {
      * Draws the currBoard in Console, for debugging mostly
      */
     public void drawBoard() {//Method drawing a board in console, for debbuging/DEV_MODE
-        for (int i = 0; i < currBoard.rows; i++) {
+        for (int i = 0; i < currBoard.getRows(); i++) {
             System.out.print("{");
-            for (int j = 0; j < currBoard.columns; j++) {
+            for (int j = 0; j < currBoard.getColumns(); j++) {
                 System.out.print(currBoard.getCellState(i, j) + ",");
             }
             System.out.print("}" + "\n");
@@ -194,9 +194,9 @@ public class BoardController implements IBoardController {
      */
     public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".ur"))) {
-            bw.write(currBoard.rows + " " + currBoard.columns + "\n");
-            for (int i = 0; i < currBoard.rows; i++) {
-                for (int j = 0; j < currBoard.columns; j++) {
+            bw.write(currBoard.getRows() + " " + currBoard.getColumns() + "\n");
+            for (int i = 0; i < currBoard.getRows(); i++) {
+                for (int j = 0; j < currBoard.getColumns(); j++) {
                     if (currBoard.getCellState(i, j) == 3) {
                         bw.write(i + "." + j + "\n");
                     } else if (currBoard.getCellState(i, j) == 1 || currBoard.getCellState(i, j) == 2) {
@@ -215,20 +215,16 @@ public class BoardController implements IBoardController {
     @Override
     public void writeGenToFile(String fileName) throws FileException {//Writing the current generation to a file as a Board object
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FileOutputStream fos = null;
-                ObjectOutputStream out = null;
-                try {
-                    fos = new FileOutputStream(fileName);
-                    out = new ObjectOutputStream(fos);
-                    out.writeObject(currBoard);
-                    out.close();
-                } catch (Exception ex) {
-                }
-            }
-        }).start();
+        FileOutputStream fos = null;
+        ObjectOutputStream out = null;
+        try {
+            fos = new FileOutputStream(fileName);
+            out = new ObjectOutputStream(fos);
+            out.writeObject(currBoard);
+            out.close();
+        } catch (Exception ex) {
+            throw new FileException("Cannot write to the file");
+        }
 
     }
 
@@ -268,10 +264,10 @@ public class BoardController implements IBoardController {
         if (state == 3) {
             for (int i = row - 1; i < row + 2; i++) {
                 for (int j = col - 1; j < col + 2; j++) {
-                    if (i < 0 || i >= currBoard.rows) {
+                    if (i < 0 || i >= currBoard.getRows()) {
                         continue;
                     }
-                    if (j >= currBoard.columns || j < 0) {
+                    if (j >= currBoard.getColumns() || j < 0) {
                         continue;
                     }
 
@@ -296,13 +292,13 @@ public class BoardController implements IBoardController {
      * @param newComp the component we want to imprint
      */
     private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
-        int[][] tempState = new int[currBoard.rows][currBoard.columns];
+        int[][] tempState = new int[currBoard.getRows()][currBoard.getColumns()];
         for (int i = 0; i < currBoard.getCellStates().length; i++) {
             System.arraycopy(currBoard.getCellStates()[i], 0, tempState[i], 0, currBoard.getCellStates()[0].length);
         }
         for (int i = newComp.loc[0]; i < newComp.structure.length + newComp.loc[0]; i++) {
             for (int j = newComp.loc[1]; j < newComp.structure[0].length + newComp.loc[1]; j++) {
-                if (i < 0 || i >= currBoard.rows || j >= currBoard.columns || j < 0) {
+                if (i < 0 || i >= currBoard.getRows() || j >= currBoard.getColumns() || j < 0) {
                     throw new IndexOutOfBoundsException("Component does not fit in the board");
                 } else {
                     tempState[i][j] = newComp.structure[i - newComp.loc[0]][j - newComp.loc[1]];
@@ -313,6 +309,7 @@ public class BoardController implements IBoardController {
         if (newComp.wire) {//Wiring the component if requested
             switch (newComp.rotation) {
                 case 0: {
+
                     for (int[] in : newComp.input) {
                         for (int i = newComp.loc[1] + in[1] - 1; i >= 0; i--) {
                             if (isWire(in[0] + newComp.loc[0], i, false)) {
@@ -323,7 +320,7 @@ public class BoardController implements IBoardController {
                     }
 
                     for (int[] out : newComp.output) {
-                        for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.columns; i++) {
+                        for (int i = out[1] + newComp.loc[1] + 1; i < currBoard.getColumns(); i++) {
                             if (isWire(out[0] + newComp.loc[0], i, false)) {
                                 break;
                             }
@@ -342,7 +339,7 @@ public class BoardController implements IBoardController {
                         }
                     }
                     for (int[] out : newComp.output) {
-                        for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.rows; i++) {
+                        for (int i = out[0] + newComp.loc[0] + 1; i < currBoard.getRows(); i++) {
                             if (isWire(i, out[1] + newComp.loc[1], true)) {
                                 break;
                             }
@@ -353,7 +350,7 @@ public class BoardController implements IBoardController {
                 }
                 case 2: {
                     for (int[] in : newComp.input) {
-                        for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.columns; i++) {
+                        for (int i = newComp.loc[1] + in[1] + 1; i < currBoard.getColumns(); i++) {
                             if (isWire(in[0] + newComp.loc[0], i, false)) {
                                 break;
                             }
@@ -373,7 +370,7 @@ public class BoardController implements IBoardController {
                 }
                 case 3: {
                     for (int[] in : newComp.input) {
-                        for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.rows; i++) {
+                        for (int i = newComp.loc[0] + in[0] + 1; i < currBoard.getRows(); i++) {
                             if (isWire(i, in[1] + newComp.loc[1], true)) {
                                 break;
                             }
@@ -405,7 +402,7 @@ public class BoardController implements IBoardController {
     private boolean isWire(int i, int j, boolean vertical) {//Helper function for imprintComponent, to check if the next cell is wire or empty
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
-                if (k < 0 || k >= currBoard.columns) {
+                if (k < 0 || k >= currBoard.getColumns()) {
                     continue;
                 }
                 if (currBoard.getCellState(i, k) == 3) {
@@ -414,7 +411,7 @@ public class BoardController implements IBoardController {
             }
         } else {
             for (int k = i - 1; k <= i + 1; k++) {
-                if (k < 0 || k >= currBoard.rows) {
+                if (k < 0 || k >= currBoard.getRows()) {
                     continue;
                 }
                 if (currBoard.getCellState(k, j) == 3) {

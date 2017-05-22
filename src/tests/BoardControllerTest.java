@@ -83,6 +83,11 @@ public class BoardControllerTest {
         int[] nloc = {2, 10};//location of the second element
         BoardController.getInstance().placeOnBoard("ExORgate", nloc, 2, true);
         BoardController.getInstance().drawBoard();
+        try {
+            BoardController.getInstance().writeGenToFile("./newFile");
+        }catch(FileException ex){
+
+        }
         assertArrayEquals(BoardController.getInstance().getCurrBoard().getCellStates(),expImprintBoard);
     }
     /**
