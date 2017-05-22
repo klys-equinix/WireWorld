@@ -45,6 +45,7 @@ public class Utils {
     /**
      * Load settings from compatible file.
      * @param f File to load from
+     * @see SettingsManager
      */
     public static void loadSettingsFromFile(File f)
     {
@@ -73,6 +74,7 @@ public class Utils {
     /**
      * Save settings to compatible file.
      * @param f File to save to
+     * @see SettingsManager
      */
     public static void saveSettingsToFile(File f)
     {
@@ -91,6 +93,44 @@ public class Utils {
     }
 
     /**
+     * Get color of cell based on state
+     * @param cellState State of the cell
+     * @return Color Color of the cell
+     */
+    public static Color getCellColor(int cellState)
+    {
+        if(cellState == 0)
+            return SettingsManager.getInstance().getGameBackgroundColor();
+        else if(cellState == 1)
+            return SettingsManager.getInstance().getGameEleHeadColor();
+        else if(cellState == 2)
+            return SettingsManager.getInstance().getGameEleTailColor();
+        else
+            return SettingsManager.getInstance().getGameCableColor();
+    }
+
+    /**
+     * Draw board using given Graphics object.
+     * @param board Board to be draw
+     * @param g Graphics object
+     * @param zoom Zoom integer to be used
+     * @see Graphics
+     * @see Board
+     */
+    public static void drawBoard(Board board, Graphics g, int zoom)
+    {
+        for(int i = 0; i < board.columns; i++) {
+            for (int j = 0; j < board.rows; j++) {
+                if (SettingsManager.getInstance().getGameDrawOutline()) {
+                    g.setColor(Color.white);
+                    g.drawRect(j * zoom - 1, i * zoom - 1, zoom + 1, zoom + 1);
+                }
+                g.setColor(Utils.getCellColor(board.getCellState(i, j)));
+                g.fillRect(j * zoom, i * zoom, zoom, zoom);
+            }
+        }
+    }
+    /**
      * Todo
      */
     public static void writeGenToFile(String fileName, Board currBoard) throws FileException {
@@ -105,5 +145,20 @@ public class Utils {
             } catch (Exception ex) {
             }
         }).start();
+    }
+
+    /**
+     * Get extension of provided file
+     * @param file File to get extension from
+     * @return File's extension
+     * @see File
+     */
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        try {
+            return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

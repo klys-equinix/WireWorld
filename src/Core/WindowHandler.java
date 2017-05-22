@@ -3,7 +3,7 @@ package Core;
 import javax.swing.*;
 
 /**
- * <h1>WindowHandler/h1>
+ * <h1>WindowHandler</h1>
  * Interface used to create classes maintaining logic
  * of the parts of app.
  * @author Szymon "Aitwar" Chmal

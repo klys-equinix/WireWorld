@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * <h1>SettingsManager/h1>
+ * <h1>SettingsManager</h1>
  * Class containing setting's variables, maintaining access to them by sharing access methods.
  * @author Szymon "Aitwar" Chmal
  */
@@ -18,7 +18,7 @@ public class SettingsManager {
 
     /**
      * Add listeners to "OnSettingsChanged" event
-     * @return Nothing.
+     * @param toAdd SettingsListener to be added
      */
     public void addListener(SettingsListener toAdd) {
         listeners.add(toAdd);
@@ -68,7 +68,6 @@ public class SettingsManager {
     /**
      * Method used to load settings from compatible input.
      * @param br BufferedReader of input
-     * @return Nothing.
      * @exception IOException on input error
      * @see IOException
      */
@@ -103,7 +102,6 @@ public class SettingsManager {
     /**
      * Method used to save settings to compatible output.
      * @param bw BufferedWriter of output
-     * @return Nothing.
      * @exception IOException on output error
      * @see IOException
      */
@@ -120,7 +118,6 @@ public class SettingsManager {
 
     /**
      * Method used to inform listeners about settings change.
-     * @return Nothing.
      */
     private void fireChangedEvent()
     {

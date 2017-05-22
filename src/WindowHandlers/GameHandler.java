@@ -1,17 +1,25 @@
 package WindowHandlers;
 
 import Core.Settings.SettingsManager;
+import Core.Utils.Utils;
 import Core.WindowHandler;
 import WireComponents.Board;
 import WindowHandlers.BoardRenderer.BoardRenderer;
+import WireOutputs.WireJPG;
+import WireOutputs.WireOutput;
+import WireOutputs.WirePNG;
 import WireSimulator.BoardController;
 import WireSimulator.SimulatorTimer;
+import com.sun.scenario.Settings;
 
 import javax.swing.*;
-import javax.swing.Timer;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Created by Szymon on 23.04.2017.
@@ -91,6 +99,8 @@ public class GameHandler implements WindowHandler {
                 pauseButtonState = true;
             }
         });
+        infSaveButton.addActionListener(e -> showSaveDialog());
+        fixedSaveButton.addActionListener(e -> showSaveDialog());
     }
 
     @Override
@@ -153,5 +163,38 @@ public class GameHandler implements WindowHandler {
     {
         timer.cancel();
         timer.purge();
+    }
+
+    private void showSaveDialog()
+    {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".png", "png"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".jpg", "jpg"));
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            FileFilter fileFilter = fileChooser.getFileFilter();
+            WireOutput wo;
+
+            if (fileFilter.getDescription().equals(".png"))
+                wo = new WirePNG();
+            else if(fileFilter.getDescription().equals(".jpg"))
+                wo = new WireJPG();
+            else
+                return;
+
+            // Jak iterować po interfejsach?
+            try {
+                if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_INF)
+                    wo.saveBoard(BoardController.getInstance().getCurrBoard(), file, zoomSlider.getValue());
+                else
+                    wo.saveBoard(BoardController.getInstance().getMemory().get(SettingsManager.getInstance().getAppFixedCurGen()), file, zoomSlider.getValue());
+
+                JOptionPane.showMessageDialog(null,"Matryca została wyeksportowana do pliku!","WireWorld - eksport matrycy", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e1) {
+                JOptionPane.showMessageDialog(null,"Wystąpił problem w czasie zapisu do pliku!","WireWorld - eksport matrycy", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

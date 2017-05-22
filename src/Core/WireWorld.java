@@ -11,7 +11,7 @@ import javax.swing.*;
 
 /**
  * <h1>WireWorld</h1>
- * Class used to control app at low-level base..
+ * Class used to control app at low-level base.
  * @author Szymon "Aitwar" Chmal
  */
 public class WireWorld {
@@ -21,7 +21,6 @@ public class WireWorld {
 
     /**
      * Method used to prepare editor logic, create and show editor window.
-     * @return Nothing.
      */
     static public void runEditor()
     {
@@ -32,7 +31,6 @@ public class WireWorld {
 
     /**
      * Method used to prepare game settings logic, create and show settings window.
-     * @return Nothing.
      */
     static public void runControl()
     {
@@ -45,7 +43,6 @@ public class WireWorld {
      * Method used to prepare game logic, create and show game window.
      * @param filePath Path to file with board saved inside.
      * @param genNum Number of generations to generate (unused when app mode equals infinite)
-     * @return Nothing.
      */
     static public void runGame(String filePath, int genNum)
     {
