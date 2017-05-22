@@ -15,7 +15,7 @@ public class WireImage implements WireOutput {
     protected BufferedImage img;
     @Override
     public void saveBoard(Board board, File file, int zoom) throws IOException {
-        img = new BufferedImage(board.columns*zoom, board.rows*zoom, BufferedImage.TYPE_INT_RGB);
+        img = new BufferedImage(board.getColumns()*zoom, board.getRows()*zoom, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
         Utils.drawBoard(board, g, zoom);
     }

@@ -119,8 +119,8 @@ public class Utils {
      */
     public static void drawBoard(Board board, Graphics g, int zoom)
     {
-        for(int i = 0; i < board.columns; i++) {
-            for (int j = 0; j < board.rows; j++) {
+        for(int i = 0; i < board.getColumns(); i++) {
+            for (int j = 0; j < board.getRows(); j++) {
                 if (SettingsManager.getInstance().getGameDrawOutline()) {
                     g.setColor(Color.white);
                     g.drawRect(j * zoom - 1, i * zoom - 1, zoom + 1, zoom + 1);

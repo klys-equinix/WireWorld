@@ -36,7 +36,7 @@ public class BoardRenderer extends JPanel {
         if(board == null)
             return new Dimension(0, 0);
 
-        return new Dimension(board.columns * zoom, board.rows * zoom);
+        return new Dimension(board.getColumns() * zoom, board.getRows() * zoom);
     }
 
     public void setBoard(Board board)
