@@ -66,7 +66,7 @@ public class BoardController implements IBoardController {
             readBoard = (Board) in.readObject();
             in.close();
         } catch (Exception ex) {
-            throw new FileException("Cannot read file" + ex.getStackTrace());
+            throw new FileException("Cannot read file "+fileName);
         }
         if (readBoard != null) {
             this.currBoard = readBoard;
@@ -118,7 +118,7 @@ public class BoardController implements IBoardController {
                 }
             }
         } catch (FileNotFoundException ferr) {
-            throw new FileException("File not found" + ferr.getMessage());
+            throw new FileException("File not found " + fileName);
         } catch (IOException err) {
             throw new FileException("Failed to load Board file");
         }
@@ -207,9 +207,9 @@ public class BoardController implements IBoardController {
             }
 
         } catch (FileNotFoundException ferr) {
-            throw new FileException(ferr.getMessage());
+            throw new FileException("Cannot create file "+fileName);
         } catch (IOException err) {
-            throw new FileException(err.getMessage());
+            throw new FileException("Cannot write to file "+fileName);
         }
     }
 
@@ -224,7 +224,7 @@ public class BoardController implements IBoardController {
             out.writeObject(currBoard);
             out.close();
         } catch (Exception ex) {
-            throw new FileException("Cannot write to the file");
+            throw new FileException("Cannot write to the file "+fileName);
         }
 
     }
@@ -235,7 +235,7 @@ public class BoardController implements IBoardController {
         Component newComp = compFact.getComponent(compType, loc, rotation, isConnected);
         if (newComp != null) {
             try {
-                imprintComponent(newComp);//Actually handling the printing of an component
+                imprintComponent(newComp);
             } catch (IndexOutOfBoundsException out) {
                 throw new IndexOutOfBoundsException(out.getMessage());
             }

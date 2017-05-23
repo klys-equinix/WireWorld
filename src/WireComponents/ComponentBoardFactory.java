@@ -1,10 +1,17 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 15.05.2017.
+ * <h1>ComponentBoardFactory</h1>
+ * Factory of Component elements, handling production of components
  */
-public class ComponentBoardFactory extends ComponentFactory {//Extension of ComponentFactory - returns boards with components instead of components
+public class ComponentBoardFactory extends ComponentFactory {
 
+    /**
+     * <h1>getBoardComponent</h1>
+     * Function producing components
+     * @param compType
+     * @return a component of specified type, wiring, and rotation
+     */
     public Board getBoardComponent(String compType){
         Component newComponent = null;
         int[] loc={0,0};

@@ -6,6 +6,7 @@ import WireComponents.FileException;
 import WireSimulator.BoardController;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.event.*;
 import java.io.File;
 
@@ -172,6 +173,6 @@ public class EditorHandler implements WindowHandler {
         gamePanel.setVisible(true);
         controlPanel.setVisible(true);
         saveButton.setVisible(true);
-        edFrame.setSize(720, 480);
+        edFrame.pack();
     }
 }

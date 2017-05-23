@@ -1,7 +1,8 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * <h1>Diode</h1>
+ * One of components, Diode
  */
 public class Diode extends Component {
     public Diode(int rotation,int[] loc,boolean connected){

@@ -1,9 +1,16 @@
 package WireComponents;
 
 /**
- * Abstract Factory for Component class elements
+ * <h1>ComponentBoardFactory</h1>
+ * Abstract Factory of Component elements, handling production of components
  */
 public class ComponentFactory {//Abstract Factory of Component class elements
+    /**
+     * <h1>getBoardComponent</h1>
+     * Function producing components
+     * @param compType
+     * @return a component of specified type, wiring, and rotation
+     */
     public Component getComponent(String compType,int[] loc ,int rotation,boolean connected){
             switch (compType){
                 case "Diode":
