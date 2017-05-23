@@ -8,7 +8,10 @@ public class ComponentFactory {//Abstract Factory of Component class elements
     /**
      * <h1>getBoardComponent</h1>
      * Function producing components
-     * @param compType
+     * @param compType type of a component
+     * @param loc location of component
+     * @param rotation rotation of component
+     * @param connected if we wish to create cables
      * @return a component of specified type, wiring, and rotation
      */
     public Component getComponent(String compType,int[] loc ,int rotation,boolean connected){

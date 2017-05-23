@@ -14,9 +14,9 @@ public class WireHuman implements WireOutput {
     @Override
     public void saveBoard(Board board, File file, int zoom) throws IOException {
         try {
-            BoardController.getInstance().writeToUserFormat(file.getName());
+            BoardController.getInstance().writeToUserFormat(file.getAbsolutePath());
         }catch(FileException ex){
-            System.out.println("Cannot write to file");
+            throw new IOException("Cannot write to file");
         }
     }
 }
