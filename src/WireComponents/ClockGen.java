@@ -1,7 +1,8 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * <h1>ClockGen</h1>
+ * One components, pulsar
  */
 public class ClockGen extends Component {
     public ClockGen(int rotation, int[] loc,boolean connected) {

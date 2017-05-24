@@ -130,23 +130,8 @@ public class Utils {
             }
         }
     }
-    /**
-     * Todo
-     */
-    public static void writeGenToFile(String fileName, Board currBoard) throws FileException {
 
-            FileOutputStream fos = null;
-            ObjectOutputStream out = null;
-            try {
-                fos = new FileOutputStream(fileName);
-                out = new ObjectOutputStream(fos);
-                out.writeObject(currBoard);
-                out.close();
-            } catch (Exception ex) {
-                throw new FileException("Cannot write to the file");
-            }
 
-    }
 
     /**
      * Get extension of provided file

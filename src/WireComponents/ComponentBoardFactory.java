@@ -1,9 +1,8 @@
 package WireComponents;
 
-/**
- * Created by Konrad on 15.05.2017.
- */
-public class ComponentBoardFactory extends ComponentFactory {//Extension of ComponentFactory - returns boards with components instead of components
+
+public class ComponentBoardFactory extends ComponentFactory {
+
 
     public Board getBoardComponent(String compType){
         Component newComponent = null;

@@ -5,6 +5,7 @@ import Core.Utils.Utils;
 import Core.WindowHandler;
 import WireComponents.Board;
 import WindowHandlers.BoardRenderer.BoardRenderer;
+import WireOutputs.WireHuman;
 import WireOutputs.WireJPG;
 import WireOutputs.WireOutput;
 import WireOutputs.WirePNG;
@@ -173,6 +174,7 @@ public class GameHandler implements WindowHandler {
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".png", "png"));
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".jpg", "jpg"));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(".ur", "ur"));
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             FileFilter fileFilter = fileChooser.getFileFilter();
@@ -182,10 +184,11 @@ public class GameHandler implements WindowHandler {
                 wo = new WirePNG();
             else if(fileFilter.getDescription().equals(".jpg"))
                 wo = new WireJPG();
+            else if(fileFilter.getDescription().equals(".ur"))
+                wo = new WireHuman();
             else
                 return;
 
-            // Jak iterować po interfejsach?
             try {
                 if(SettingsManager.getInstance().getAppMode() == SettingsManager.APP_MODE_INF)
                     wo.saveBoard(BoardController.getInstance().getCurrBoard(), file, zoomSlider.getValue());

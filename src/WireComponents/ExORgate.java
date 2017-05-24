@@ -1,7 +1,8 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * <h1>ExORgate</h1>
+ * One of components, ExORGate
  */
 public class ExORgate extends Component {
 
