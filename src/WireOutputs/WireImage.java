@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Szymon on 22.05.2017.
+ * <h1>WireImage</h1>
+ * Output class used to prepare image to being saved
+ * @author Szymon "Aitwar" Chmal
  */
 public class WireImage implements WireOutput {
     protected BufferedImage img;

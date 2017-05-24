@@ -45,6 +45,7 @@ public class GameHandler implements WindowHandler {
 
     private boolean pauseButtonState = true;
 
+    // TODO: Fix the bug when stopping board rendering
     public GameHandler() {
         SettingsManager setman = SettingsManager.getInstance();
         if (setman.getAppMode() == SettingsManager.APP_MODE_FIXED)

@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Szymon on 22.05.2017.
+ * <h1>WirePNG</h1>
+ * Output class used to generate PNG file
+ * @author Szymon "Aitwar" Chmal
  */
 public class WirePNG extends WireImage {
     @Override
