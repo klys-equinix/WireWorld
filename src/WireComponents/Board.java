@@ -31,22 +31,26 @@ public class Board implements Serializable {//Model for our application
     public void setCellState(int i, int j, int state) {
         this.cellStates[i][j] = state;
     }
-    public int getRows(){
+
+    public int getRows() {
         return this.rows;
     }
-    public int getColumns(){
+
+    public int getColumns() {
         return this.columns;
     }
+
     public int getCellState(int i, int j) {
         return cellStates[i][j];
     }
+
     public int[][] getCellStates() {
         return cellStates;
     }
+
     public void setCellStates(int[][] cellStates) {
         this.cellStates = cellStates;
     }
-
 
 
 }

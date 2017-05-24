@@ -20,8 +20,9 @@ import java.util.ArrayList;
 public class BoardController implements IBoardController {
     private static final boolean DEV_MODE = false;
     private static BoardController ourInstance = new BoardController();
-    private ArrayList<Board> memory = new ArrayList<>();//Holds all generations apart from the current one
-    private Board currBoard;//Holds current generation
+
+    private ArrayList<Board> memory = new ArrayList<>();
+    private Board currBoard;
     private boolean firstGen = true;
 
     private BoardController() {
@@ -29,6 +30,10 @@ public class BoardController implements IBoardController {
 
     public static BoardController getInstance() {
         return ourInstance;
+    }
+
+    public static void reset() {
+        ourInstance = new BoardController();
     }
 
     public ArrayList<Board> getMemory() {
@@ -40,19 +45,15 @@ public class BoardController implements IBoardController {
         return currBoard;
     }
 
-    public static void reset() {
-        ourInstance = new BoardController();
-    }
-
     @Override
     public void init(int rows, int columns) {//Initialize an empty board of specified size
         this.currBoard = new Board(rows, columns);
     }
 
     @Override
-    public void init(String fileName) throws FileException {//Initialize a board from a file with a Board object
+    public void init(String fileName) throws FileException {
         String[] fileFormat = fileName.split("\\.");
-        if(fileFormat.length>1&&fileFormat[1].equals("ur")){
+        if (fileFormat.length > 1 && fileFormat[1].equals("ur")) {
             readFromUserFormat(fileName);
             return;
         }
@@ -65,7 +66,7 @@ public class BoardController implements IBoardController {
             readBoard = (Board) in.readObject();
             in.close();
         } catch (Exception ex) {
-            throw new FileException("Cannot read file" + ex.getStackTrace());
+            throw new FileException("Cannot read file " + fileName);
         }
         if (readBoard != null) {
             this.currBoard = readBoard;
@@ -79,7 +80,7 @@ public class BoardController implements IBoardController {
      * @param fileName the file we want to save to
      * @throws FileException when reading the file failed
      */
-    public void readFromUserFormat(String fileName) throws FileException {//Read board from a file of understandable format
+    public void readFromUserFormat(String fileName) throws FileException {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -117,14 +118,14 @@ public class BoardController implements IBoardController {
                 }
             }
         } catch (FileNotFoundException ferr) {
-            throw new FileException("File not found" + ferr.getMessage());
+            throw new FileException("File not found " + fileName);
         } catch (IOException err) {
             throw new FileException("Failed to load Board file");
         }
     }
 
     @Deprecated
-    public void start(int numGen) {//Method existing solely for unit tests
+    public void start(int numGen) {
         int numGenenerations = numGen;
 
         if (numGenenerations != 0) {
@@ -136,7 +137,7 @@ public class BoardController implements IBoardController {
     }
 
     @Override
-    public void nextGeneration() {//Call to make board go to the next state resulting from current state
+    public void nextGeneration() {
         if (firstGen) {
             this.memory.add(currBoard);
             for (int i = 0; i < currBoard.getRows(); i++) {
@@ -174,7 +175,7 @@ public class BoardController implements IBoardController {
     /**
      * Draws the currBoard in Console, for debugging mostly
      */
-    public void drawBoard() {//Method drawing a board in console, for debbuging/DEV_MODE
+    public void drawBoard() {
         for (int i = 0; i < currBoard.getRows(); i++) {
             System.out.print("{");
             for (int j = 0; j < currBoard.getColumns(); j++) {
@@ -192,8 +193,8 @@ public class BoardController implements IBoardController {
      * @param fileName name of a file we want to save to
      * @throws FileException when writing to file failed
      */
-    public void writeToUserFormat(String fileName) throws FileException {//Writing the current generetion to a file which is understandable to humans
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName+".ur"))) {
+    public void writeToUserFormat(String fileName) throws FileException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName + ".ur"))) {
             bw.write(currBoard.getRows() + " " + currBoard.getColumns() + "\n");
             for (int i = 0; i < currBoard.getRows(); i++) {
                 for (int j = 0; j < currBoard.getColumns(); j++) {
@@ -206,14 +207,14 @@ public class BoardController implements IBoardController {
             }
 
         } catch (FileNotFoundException ferr) {
-            throw new FileException(ferr.getMessage());
+            throw new FileException("Cannot create file " + fileName);
         } catch (IOException err) {
-            throw new FileException(err.getMessage());
+            throw new FileException("Cannot write to file " + fileName);
         }
     }
 
     @Override
-    public void writeGenToFile(String fileName) throws FileException {//Writing the current generation to a file as a Board object
+    public void writeGenToFile(String fileName) throws FileException {
 
         FileOutputStream fos = null;
         ObjectOutputStream out = null;
@@ -223,18 +224,18 @@ public class BoardController implements IBoardController {
             out.writeObject(currBoard);
             out.close();
         } catch (Exception ex) {
-            throw new FileException("Cannot write to the file");
+            throw new FileException("Cannot write to the file " + fileName);
         }
 
     }
 
     @Override
-    public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {//Producing a component element, and than placing it on board
+    public void placeOnBoard(String compType, int[] loc, int rotation, boolean isConnected) throws IndexOutOfBoundsException {
         ComponentFactory compFact = new ComponentFactory();
         Component newComp = compFact.getComponent(compType, loc, rotation, isConnected);
         if (newComp != null) {
             try {
-                imprintComponent(newComp);//Actually handling the printing of an component
+                imprintComponent(newComp);
             } catch (IndexOutOfBoundsException out) {
                 throw new IndexOutOfBoundsException(out.getMessage());
             }
@@ -248,7 +249,7 @@ public class BoardController implements IBoardController {
      * @param col column index of the cell
      * @return next value of the cell
      */
-    private int evalCell(int row, int col) {//Evaluating the value a cell will have in the coming generation
+    private int evalCell(int row, int col) {
         int state;
         int count = 0;
         state = currBoard.getCellState(row, col);
@@ -291,7 +292,7 @@ public class BoardController implements IBoardController {
      *
      * @param newComp the component we want to imprint
      */
-    private void imprintComponent(Component newComp) {//Method handling the printing of a component on the board
+    private void imprintComponent(Component newComp) {
         int[][] tempState = new int[currBoard.getRows()][currBoard.getColumns()];
         for (int i = 0; i < currBoard.getCellStates().length; i++) {
             System.arraycopy(currBoard.getCellStates()[i], 0, tempState[i], 0, currBoard.getCellStates()[0].length);
@@ -306,7 +307,7 @@ public class BoardController implements IBoardController {
             }
         }
         currBoard.setCellStates(tempState);
-        if (newComp.wire) {//Wiring the component if requested
+        if (newComp.wire) {
             switch (newComp.rotation) {
                 case 0: {
 
@@ -396,10 +397,10 @@ public class BoardController implements IBoardController {
      *
      * @param i        row index of the cell
      * @param j        column index of the cell
-     * @param vertical is the component placed vertically
+     * @param vertical true if component is placed vertically, false otherwise
      * @return true if it is wire, false when not
      */
-    private boolean isWire(int i, int j, boolean vertical) {//Helper function for imprintComponent, to check if the next cell is wire or empty
+    private boolean isWire(int i, int j, boolean vertical) {
         if (vertical) {
             for (int k = j - 1; k <= j + 1; k++) {
                 if (k < 0 || k >= currBoard.getColumns()) {

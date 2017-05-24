@@ -1,12 +1,13 @@
 package WireComponents;
 
 /**
- * Created by Konrad on 24.04.2017.
+ * <h1>ExORgate</h1>
+ * One of components, ExORGate
  */
 public class ExORgate extends Component {
 
-    public ExORgate(int rotation, int[] loc,boolean connected) {
-        this.wire=connected;
+    public ExORgate(int rotation, int[] loc, boolean connected) {
+        this.wire = connected;
         this.loc = loc;
         this.rotation = rotation;
         switch (rotation) {

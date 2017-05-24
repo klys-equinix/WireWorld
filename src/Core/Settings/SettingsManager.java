@@ -3,50 +3,37 @@ package Core.Settings;
 import Core.Utils.Utils;
 
 import java.awt.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * <h1>SettingsManager</h1>
  * Class containing setting's variables, maintaining access to them by sharing access methods.
+ *
  * @author Szymon "Aitwar" Chmal
  */
 public class SettingsManager {
-    private static SettingsManager setman = new SettingsManager();
-
-    private java.util.List<SettingsListener> listeners = new ArrayList<SettingsListener>();
-
-    /**
-     * Add listeners to "OnSettingsChanged" event
-     * @param toAdd SettingsListener to be added
-     */
-    public void addListener(SettingsListener toAdd) {
-        listeners.add(toAdd);
-    }
-
     /*
         App modes
     */
     public final static int APP_MODE_FIXED = 0;
     public final static int APP_MODE_INF = 1;
-
     public final static int APP_FIXED_AUTO = 0;
     public final static int APP_FIXED_MANUAL = 1;
-
+    private static SettingsManager setman = new SettingsManager();
+    private java.util.List<SettingsListener> listeners = new ArrayList<SettingsListener>();
     private int appMode;
     private int appFixedMode;
-
     private int appFixedGen;
     private int appFixedCurGen;
-
     private Color gameEleHeadColor;
     private Color gameEleTailColor;
     private Color gameCableColor;
     private Color gameBackgroundColor;
-
     private int gameGenTime;
     private boolean gameDrawOutline;
-
     private SettingsManager() {
         gameEleHeadColor = new Color(255, 0, 0);
         gameEleTailColor = new Color(255, 255, 0);
@@ -59,6 +46,7 @@ public class SettingsManager {
 
     /**
      * Method used to obtain instance of Settings Manager.
+     *
      * @return Instance of Settings Manager
      */
     public static SettingsManager getInstance() {
@@ -66,15 +54,24 @@ public class SettingsManager {
     }
 
     /**
+     * Add listeners to "OnSettingsChanged" event
+     *
+     * @param toAdd SettingsListener to be added
+     */
+    public void addListener(SettingsListener toAdd) {
+        listeners.add(toAdd);
+    }
+
+    /**
      * Method used to load settings from compatible input.
+     *
      * @param br BufferedReader of input
-     * @exception IOException on input error
+     * @throws IOException on input error
      * @see IOException
      */
-    public void loadSettings(BufferedReader br) throws IOException
-    {
+    public void loadSettings(BufferedReader br) throws IOException {
         String str;
-        while((str = br.readLine()) != null) {
+        while ((str = br.readLine()) != null) {
             String var[] = str.split(":");
             if (var.length != 3)
                 continue;
@@ -88,12 +85,12 @@ public class SettingsManager {
                 else if (var[1].equals("BACKGROUND"))
                     SettingsManager.getInstance().setGameBackgroundColor(Utils.getColorFromVector(var[2]));
             }
-            if(var[0].equals("SIM")) {
+            if (var[0].equals("SIM")) {
                 if (var[1].equals("TIME"))
                     SettingsManager.getInstance().setGameGenTime(Integer.parseInt(var[2]));
             }
-            if(var[0].equals("SIM")) {
-                if(var[1].equals("OUTLINE"))
+            if (var[0].equals("SIM")) {
+                if (var[1].equals("OUTLINE"))
                     SettingsManager.getInstance().setGameDrawOutline(Boolean.parseBoolean(var[2]));
             }
         }
@@ -101,8 +98,9 @@ public class SettingsManager {
 
     /**
      * Method used to save settings to compatible output.
+     *
      * @param bw BufferedWriter of output
-     * @exception IOException on output error
+     * @throws IOException on output error
      * @see IOException
      */
     public void saveSettings(BufferedWriter bw) throws IOException {
@@ -119,10 +117,13 @@ public class SettingsManager {
     /**
      * Method used to inform listeners about settings change.
      */
-    private void fireChangedEvent()
-    {
+    private void fireChangedEvent() {
         for (SettingsListener hl : listeners)
             hl.changed();
+    }
+
+    public int getAppMode() {
+        return appMode;
     }
 
     public void setAppMode(int mode) {
@@ -131,8 +132,8 @@ public class SettingsManager {
         fireChangedEvent();
     }
 
-    public int getAppMode() {
-        return appMode;
+    public int getAppFixedMode() {
+        return appFixedMode;
     }
 
     public void setAppFixedMode(int mode) {
@@ -141,18 +142,14 @@ public class SettingsManager {
         fireChangedEvent();
     }
 
-    public int getAppFixedMode() {
-        return appFixedMode;
+    public int getAppFixedGen() {
+        return appFixedGen;
     }
 
     public void setAppFixedGen(int gen) {
         assert (gen < 0);
         appFixedGen = gen;
         fireChangedEvent();
-    }
-
-    public int getAppFixedGen() {
-        return appFixedGen;
     }
 
     public Color getGameEleHeadColor() {
@@ -213,8 +210,7 @@ public class SettingsManager {
         return gameDrawOutline;
     }
 
-    public void setGameDrawOutline(boolean gameDrawOutline)
-    {
+    public void setGameDrawOutline(boolean gameDrawOutline) {
         this.gameDrawOutline = gameDrawOutline;
         fireChangedEvent();
     }

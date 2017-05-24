@@ -1,8 +1,6 @@
 package WindowHandlers.BoardRenderer;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 
 /**
  * Created by Szymon on 15.05.2017.
@@ -14,8 +12,7 @@ public class EditorRenderer extends BoardRenderer {
     public EditorRenderer() {
     }
 
-    public void setMouseCell(int x, int y)
-    {
+    public void setMouseCell(int x, int y) {
         mouseCellX = x;
         mouseCellY = y;
         repaint();
@@ -26,9 +23,9 @@ public class EditorRenderer extends BoardRenderer {
         super.paintComponent(g);
         Graphics2D g1 = (Graphics2D) g;
         g1.setColor(Color.blue);
-        if(board == null)
+        if (board == null)
             return;
-        if(mouseCellX != -1 && mouseCellY != -1 && mouseCellX < board.getColumns() && mouseCellY < board.getRows())
-            g1.fillRect(mouseCellX*zoom, mouseCellY*zoom, zoom, zoom);
+        if (mouseCellX != -1 && mouseCellY != -1 && mouseCellX < board.getColumns() && mouseCellY < board.getRows())
+            g1.fillRect(mouseCellX * zoom, mouseCellY * zoom, zoom, zoom);
     }
 }

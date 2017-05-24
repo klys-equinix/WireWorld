@@ -6,7 +6,9 @@ import WireComponents.FileException;
 import WireSimulator.BoardController;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 
 /**
@@ -48,17 +50,17 @@ public class EditorHandler implements WindowHandler {
         editorRenderer.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                mouseCellX = (int) Math.floor(e.getX()/zoomSlider.getValue());
-                mouseCellY = (int) Math.floor(e.getY()/zoomSlider.getValue());
+                mouseCellX = (int) Math.floor(e.getX() / zoomSlider.getValue());
+                mouseCellY = (int) Math.floor(e.getY() / zoomSlider.getValue());
                 editorRenderer.setMouseCell(mouseCellX, mouseCellY);
             }
         });
         editorRenderer.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(mouseCellX > BoardController.getInstance().getCurrBoard().getRows() || mouseCellY > BoardController.getInstance().getCurrBoard().getColumns())
+                if (mouseCellX > BoardController.getInstance().getCurrBoard().getRows() || mouseCellY > BoardController.getInstance().getCurrBoard().getColumns())
                     return;
-                if(SwingUtilities.isLeftMouseButton(e)) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     int position[] = {mouseCellY, mouseCellX};
                     if (cableButton.isSelected())
                         BoardController.getInstance().getCurrBoard().setCellState(mouseCellY, mouseCellX, 3);
@@ -94,10 +96,10 @@ public class EditorHandler implements WindowHandler {
                 try {
                     BoardController.getInstance().writeGenToFile(file.getAbsolutePath());
                 } catch (FileException e1) {
-                    JOptionPane.showMessageDialog(null, e.toString(),"WireWorld - zapis matrycy", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, e.toString(), "WireWorld - zapis matrycy", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                JOptionPane.showMessageDialog(null,"Matryca została zapisana pomyślnie!","WireWorld - zapis matrycy", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Matryca została zapisana pomyślnie!", "WireWorld - zapis matrycy", JOptionPane.INFORMATION_MESSAGE);
                 makeEditorAccessible();
             }
         });
@@ -108,23 +110,23 @@ public class EditorHandler implements WindowHandler {
                 try {
                     BoardController.getInstance().init(file.getAbsolutePath());
                 } catch (FileException e1) {
-                    JOptionPane.showMessageDialog(null, e.toString(),"WireWorld - odczyt matrycy", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, e.toString(), "WireWorld - odczyt matrycy", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                JOptionPane.showMessageDialog(null,"Matryca została wczytana pomyślnie!","WireWorld - odczyt matrycy", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Matryca została wczytana pomyślnie!", "WireWorld - odczyt matrycy", JOptionPane.INFORMATION_MESSAGE);
                 makeEditorAccessible();
             }
         });
         newBoardButton.addActionListener(e -> {
-            String str = (String) JOptionPane.showInputDialog(
-                null,
-                "Wielkość matrycy w formacie: [KOLUMNY]x[WIERSZE]",
-                "WireWorld - nowa matryca",
-                JOptionPane.PLAIN_MESSAGE);
-            if(str == null)
+            String str = JOptionPane.showInputDialog(
+                    null,
+                    "Wielkość matrycy w formacie: [KOLUMNY]x[WIERSZE]",
+                    "WireWorld - nowa matryca",
+                    JOptionPane.PLAIN_MESSAGE);
+            if (str == null)
                 return;
             String val[] = str.split("x");
-            if(val.length != 2) {
+            if (val.length != 2) {
                 JOptionPane.showMessageDialog(null, "Ups.. Format wprowadzonych danych niezgdony z oczekiwanym!", "WireWorld - stworzenie matrycy", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -161,17 +163,16 @@ public class EditorHandler implements WindowHandler {
 
     @Override
     public void destroyWindow() {
-        if(edFrame.isVisible() == true)
+        if (edFrame.isVisible() == true)
             edFrame.setVisible(false);
-        edFrame.dispose();;
+        edFrame.dispose();
     }
 
-    private void makeEditorAccessible()
-    {
+    private void makeEditorAccessible() {
         editorRenderer.setBoard(BoardController.getInstance().getCurrBoard());
         gamePanel.setVisible(true);
         controlPanel.setVisible(true);
         saveButton.setVisible(true);
-        edFrame.setSize(720, 480);
+        edFrame.pack();
     }
 }

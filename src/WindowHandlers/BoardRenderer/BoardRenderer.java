@@ -1,6 +1,5 @@
 package WindowHandlers.BoardRenderer;
 
-import Core.Settings.SettingsManager;
 import Core.Utils.Utils;
 import WireComponents.Board;
 
@@ -19,7 +18,7 @@ public class BoardRenderer extends JPanel {
         super.paintComponent(g);
         Graphics2D g1 = (Graphics2D) g;
 
-        if(board == null)
+        if (board == null)
             return;
 
         Utils.drawBoard(board, g1, zoom);
@@ -33,14 +32,13 @@ public class BoardRenderer extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        if(board == null)
+        if (board == null)
             return new Dimension(0, 0);
 
         return new Dimension(board.getColumns() * zoom, board.getRows() * zoom);
     }
 
-    public void setBoard(Board board)
-    {
+    public void setBoard(Board board) {
         this.board = board;
         repaint();
     }

@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * <h1>WireJPG</h1>
  * Output class used to generate JPG file
+ *
  * @author Szymon "Aitwar" Chmal
  */
 public class WireJPG extends WireImage {

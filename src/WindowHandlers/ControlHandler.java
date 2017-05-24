@@ -1,13 +1,15 @@
 package WindowHandlers;
 
-import Core.*;
 import Core.Settings.SettingsManager;
 import Core.Utils.Utils;
+import Core.WindowHandler;
+import Core.WireWorld;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -92,25 +94,22 @@ public class ControlHandler implements WindowHandler {
         group.add(infiniteRadioButton);
         group.add(fixedRadioButton);
         headColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor głowy elektronu", new Color(255, 255 ,255));
-            if(newColor != null)
-            {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor głowy elektronu", new Color(255, 255, 255));
+            if (newColor != null) {
                 headElecColorField.setText(Utils.getColorAsVector(newColor));
                 SettingsManager.getInstance().setGameEleHeadColor(newColor);
             }
         });
         tailColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor ogonu elektronu", new Color(255, 255 ,255));
-            if(newColor != null)
-            {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor ogonu elektronu", new Color(255, 255, 255));
+            if (newColor != null) {
                 tailElecColorField.setText(Utils.getColorAsVector(newColor));
                 SettingsManager.getInstance().setGameEleTailColor(newColor);
             }
         });
         cableColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor ogonu elektronu", new Color(255, 255 ,255));
-            if(newColor != null)
-            {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor ogonu elektronu", new Color(255, 255, 255));
+            if (newColor != null) {
                 cableColorField.setText(Utils.getColorAsVector(newColor));
                 SettingsManager.getInstance().setGameCableColor(newColor);
             }
@@ -120,7 +119,7 @@ public class ControlHandler implements WindowHandler {
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 Utils.saveSettingsToFile(file);
-                JOptionPane.showMessageDialog(null,"Konfiguracja została pomyślnie zapisana!","WireWorld - zapis konfiguracji",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Konfiguracja została pomyślnie zapisana!", "WireWorld - zapis konfiguracji", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         SettingsManager.getInstance().addListener(() -> {
@@ -135,14 +134,13 @@ public class ControlHandler implements WindowHandler {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 Utils.loadSettingsFromFile(fc.getSelectedFile());
-                JOptionPane.showMessageDialog(null,"Konfiguracja została pomyślnie wczytana!","WireWorld - odczyt konfiguracji",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Konfiguracja została pomyślnie wczytana!", "WireWorld - odczyt konfiguracji", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         runEditorButton.addActionListener(e -> WireWorld.runEditor());
         backgroundColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", new Color(255, 255 ,255));
-            if(newColor != null)
-            {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor tła", new Color(255, 255, 255));
+            if (newColor != null) {
                 backgroundColorField.setText(Utils.getColorAsVector(newColor));
                 SettingsManager.getInstance().setGameBackgroundColor(newColor);
             }
@@ -153,12 +151,12 @@ public class ControlHandler implements WindowHandler {
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
                 JTextField field = (JTextField) e.getSource();
-                if(!field.getText().isEmpty())
+                if (!field.getText().isEmpty())
                     SettingsManager.getInstance().setGameGenTime(Integer.parseInt(field.getText()));
             }
         });
         drawOutlinesCheckBox.addActionListener(e -> {
-            JCheckBox comp = (JCheckBox)e.getSource();
+            JCheckBox comp = (JCheckBox) e.getSource();
             SettingsManager.getInstance().setGameDrawOutline(comp.isSelected());
         });
     }
@@ -194,7 +192,7 @@ public class ControlHandler implements WindowHandler {
 
     @Override
     public void destroyWindow() {
-        if(controlFrame.isVisible() == true)
+        if (controlFrame.isVisible() == true)
             controlFrame.setVisible(false);
         controlFrame.dispose();
     }
