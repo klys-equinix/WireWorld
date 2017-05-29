@@ -1,0 +1,80 @@
+<html>
+<head>
+
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1>Sprawozdanie z projektu</h1>
+        <h4>Konrad Lys, Szymon Chmal</h4>
+    </div>
+    <h1>Specyfikacja funkcjonalna</h1>
+    <h2>Przeznaczenie</h2>
+    <p>
+        Program WireWorld jest implementacją automatu komórkowego zaproponowanego przez Briana Silvermana w roku 1987.
+        Pozwala na symulacje przepływu elektronu przez wskazany obwód, jest często używany do symulacji elementów
+        elektronicznych operujących na wartościach bitowych. Dodatkowo umożliwia eksportowanie konkretnej generacji
+        matrycy do wybranego formatu graficznego lub tekstowego. Zawiera również prosty edytor umożliwiający tworzenie
+        matryc do symulacji.
+    </p>
+    <h2>Wywołanie</h2>
+    <p>
+        Program uruchamiany jest za pomocą archiwum JAR.
+    </p>
+    <h2>Dane wejściowe</h2>
+    <p>
+        Plik tekstowy zawierający matrycę postaci:
+        <br><code>
+            AxB
+        </code>
+        <br>gdzie: <span style="font-weight: bold">A</span> i  <span style="font-weight: bold">B</span> to rozmiary matrycy
+        zapisane w pierwszej linii pliku, a następnie dowolna ilość linii następującej postaci:
+        <br><code>
+            a.b:v
+        </code>
+        <br>gdzie:  <span style="font-weight: bold">a</span> to indeks rzędu,  <span style="font-weight: bold">b</span>
+        indeks kolumny, w której chcemy umieścić wartość  <span style="font-weight: bold">v</span> (może to być 1,2,3;
+        gdy brak  <span style="font-weight: bold">v</span> domyślnie 3), lub
+        <br><code>
+            a-c.b-d:v
+        </code>
+        <br>W tym przypadku wypełnione zostaną indeksy pomiędzy  <span style="font-weight: bold">a</span> i
+        <span style="font-weight: bold">c</span> (wiersze) oraz  <span style="font-weight: bold">b</span>
+        i  <span style="font-weight: bold">d</span> (kolumny).
+        Wartość  <span style="font-weight: bold">3</span> odpowiada przewodnikowi,
+        <span style="font-weight: bold">2</span> ogonowi elektronu,  <span style="font-weight: bold">1</span>
+        głowie elektronu.<br>
+        Przykładowy plik:
+        <br><code>
+            5 10
+            2.0-9
+            2.4:2
+            2.5:1
+        </code><br>
+        Aplikacja pozwala również na konfigurację wyglądu symulacji oraz jej zachowań:
+        <ul>
+            <li>Kolorystyka generowanego podglądu - kolory tła, głowy i ogona elektronu, przewodnika</li>
+            <li>Rysowanie granic między poszczególnymi komórkami</li>
+            <li>Czas życia generacji</li>
+            <li>Ilość żądanych generacji (w przypadku trybu ustalonego)</li>
+            <li>Tryb aplikacji - ustalony lub nieskończony</li>
+        </ul>
+    </p>
+    <h2>Dane wyjściowe</h2>
+    <p>
+        Program prezentuje wyniki w postaci wizualizacji matrycy zgodnie z konfiguracją. Istnieje również opcja
+        eksportu poszczególnej generacji do pliku graficznego lub tekstowego.
+    </p>
+    <h2>Działanie programu</h2>
+    <p>
+        Program otwiera okno konfiguracyjne pozwalające na wybór pliku z matrycą, trybu działania aplikacji
+        oraz zmianę ustawień graficznych dot. wizualizacji. To sam okno pozwala na eksport i import ustawień
+        oraz otworzenie edytora.<br>
+        Po wybraniu opcji rozpoczęcia generacji otwierane jest kolejne okno zawierające pole z wizualizacją
+        generacji oraz ustawienia dot. przybliżenia, sterowania podglądem generacji oraz przycisk umożliwiający zrzut.
+        <br>Wybór edytora spowoduje otwarcie innego okna pozwalającego na wczytanie lub utworzenie nowej matrycy.
+        Kolejne okno pozwala na tworzenie poszczególnych komórek za pomocą lewego przycisku myszy lub
+        (po wybraniu odpowiedniego elementu z menu) tworzenie poszczególnych elementów złożonych (bramki, pulsar).
+        Za pomocą prawego przycisku myszy można wyczyścić wskazywaną komórkę.
+    </p>
+</body>
+</html>
